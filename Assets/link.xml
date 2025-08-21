@@ -1,0 +1,28 @@
+<linker>
+  <!-- Supabase .NET SDK and deps -->
+  <assembly fullname="Supabase">
+    <type fullname="*" preserve="all"/>
+  </assembly>
+  <assembly fullname="Postgrest">
+    <type fullname="*" preserve="all"/>
+  </assembly>
+  <assembly fullname="Realtime">
+    <type fullname="*" preserve="all"/>
+  </assembly>
+  <assembly fullname="Gotrue">
+    <type fullname="*" preserve="all"/>
+  </assembly>
+
+  <!-- JSON / HTTP used at runtime -->
+  <assembly fullname="System.Text.Json">
+    <type fullname="*" preserve="all"/>
+  </assembly>
+  <assembly fullname="System.Net.Http">
+    <type fullname="*" preserve="all"/>
+  </assembly>
+
+  <!-- (Optionnel) si tu utilises SocketIOClient via Realtime -->
+  <assembly fullname="SocketIOClient">
+    <type fullname="*" preserve="all"/>
+  </assembly>
+</linker>

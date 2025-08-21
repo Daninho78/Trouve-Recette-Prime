@@ -10,6 +10,7 @@
     "com.supabase.dll.websocket.client": "https://github.com/kamyker/supabase-unity.git?path=.UnityDlls/Websocket.Client",
     "com.supabase.unity": "https://github.com/kamyker/supabase-unity.git?path=Unity",
     "com.unity.collab-proxy": "2.8.2",
+    "com.unity.device-simulator.devices": "1.0.0",
     "com.unity.feature.2d": "2.0.1",
     "com.unity.feature.mobile": "1.0.0",
     "com.unity.ide.rider": "3.0.36",
