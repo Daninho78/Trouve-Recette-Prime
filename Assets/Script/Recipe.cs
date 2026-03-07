@@ -22,8 +22,29 @@ public class Recipe : BaseModel
     [Column("title")]
     public string Title { get; set; }
 
-    [Column("duration")]
-    public int Duration { get; set; }
+    [Column("prep_time_minutes")]
+    public int? PrepTimeMinutes { get; set; }
+
+    [Column("cook_time_minutes")]
+    public int? CookTimeMinutes { get; set; }
+
+    [Column("rest_time_minutes")]
+    public int? RestTimeMinutes { get; set; }
+
+    [Column("serving")]
+    public short? Serving { get; set; }
+
+    [Column("page")]
+    public int? Page { get; set; }
+
+    [Column("rate")]
+    public short Rate { get; set; }
+
+    [Column("difficulty")]
+    public string Difficulty { get; set; }
+
+    [Column("remarque")]
+    public string Remarque { get; set; }
 
     [Column("created_at")]
     public DateTime CreatedAt { get; set; }

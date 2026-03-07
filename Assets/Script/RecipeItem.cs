@@ -18,6 +18,6 @@ public class RecipeItem : MonoBehaviour
 
     private void OnClick()
     {
-        recipeDetailUI.ShowDetails(recipe.Title, recipe.Id);
+        recipeDetailUI.ShowDetails(recipe);
     }
 }

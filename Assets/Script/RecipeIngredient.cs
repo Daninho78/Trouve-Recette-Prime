@@ -10,4 +10,13 @@ public class RecipeIngredient : BaseModel
 
     [PrimaryKey("ingredient_id", false)]
     public Guid IngredientId { get; set; }
+
+    [Column("quantity")]
+    public decimal? Quantity { get; set; }
+
+    [Column("unity")]
+    public string Unity { get; set; }
+
+    [Column("quantity_text")]
+    public string QuantityText { get; set; }
 }

@@ -24,7 +24,7 @@ public static class RecipeService
         }
     }
 
-    public static async Task<List<Ingredient>> GetIngredientsByRecipe(Guid recipeId)
+    public static async Task<List<IngredientLine>> GetIngredientsByRecipe(Guid recipeId)
     {
         try
         {
@@ -35,7 +35,7 @@ public static class RecipeService
                 .Get();
 
             // 2. On prépare une liste d'ingrédients à retourner
-            List<Ingredient> ingredients = new List<Ingredient>();
+            List<IngredientLine> ingredients = new List<IngredientLine>();
 
             foreach (var liaison in liaisons.Models)
             {
@@ -47,9 +47,21 @@ public static class RecipeService
 
                 // 4. On ajoute l'ingrédient (il devrait y en avoir qu’un par ID)
                 if (ingredientResult.Models.Count > 0)
-                {
-                    ingredients.Add(ingredientResult.Models[0]);
-                }
+{
+    var ing = ingredientResult.Models[0];
+
+    ingredients.Add(new IngredientLine
+    {
+        IngredientId = ing.Id,
+        Name = ing.Name,
+
+        // pour l’instant on met vide / null,
+        // on branchera quantity/unit/quantity_text juste après
+        Quantity = liaison.Quantity,
+        Unity = liaison.Unity,
+        QuantityText = liaison.QuantityText
+    });
+}
             }
 
             return ingredients;
@@ -57,7 +69,7 @@ public static class RecipeService
         catch (Exception ex)
         {
             Debug.LogError("❌ Erreur lors du chargement des ingrédients : " + ex.Message);
-            return new List<Ingredient>();
+            return new List<IngredientLine>();
         }
     }
 
