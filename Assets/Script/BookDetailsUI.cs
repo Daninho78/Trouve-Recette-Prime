@@ -9,16 +9,20 @@ public class BookDetailsUI : MonoBehaviour
 {
     public GameObject panelDetails;
     public TextMeshProUGUI titreLivre;
+    public TextMeshProUGUI auteurLivre;
+    public TextMeshProUGUI collectionLivre;
     public Transform contentRecette;
     public GameObject prefabRecipeItem;
     public RecipeDetailUI recipeDetailUI;
     private Guid bookId;
 
-    public async void ShowDetails(string titre, Guid id)
+    public async void ShowDetails(Book book)
     {
         panelDetails.SetActive(true);           // On affiche le panel
-        titreLivre.text = titre;                // On met à jour le titre
-        bookId = id;                            // On garde l'ID du livre sélectionné
+        titreLivre.text = book.Title;                // On met à jour le titre
+        bookId = book.Id;                            // On garde l'ID du livre sélectionné
+        auteurLivre.text = book.Author;
+        collectionLivre.text = book.Collection;
 
         await LoadRecipesForBook();             // On charge les recettes (voir ci-dessous)
     }

@@ -16,6 +16,6 @@ public class BookItem : MonoBehaviour
 
     private void OnClick()
     {
-        bookDetailsUI.ShowDetails(book.Title, book.Id);
+        bookDetailsUI.ShowDetails(book);
     }
 }
