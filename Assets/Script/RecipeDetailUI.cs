@@ -59,7 +59,7 @@ public class RecipeDetailUI : MonoBehaviour
         return;
     }
 
-        ingredientsText.text = "";
+        ingredientsText.text = $"Ingrédients\n\n";
         foreach (var ingr in ingredients)
         {
             string line = BuildIngredientLine(ingr);
@@ -88,12 +88,10 @@ public class RecipeDetailUI : MonoBehaviour
 
         tempsText.text = temps;
         
-    //tempsPrepaText.text = $" {recipe.PrepTimeMinutes} min";
-    nbrPartsText.text = $" {recipe.Serving} personnes";
-    //tempsCuissonText.text = $" {recipe.CookTimeMinutes}";
-    pageText.text = recipe.Page != null ? $"{recipe.Page}" : "—";
-    rateText.text = $"{recipe.Rate}/5";
-    difficultyText.text = $" {recipe.Difficulty}";
+    nbrPartsText.text = $"Pour {recipe.Serving} personnes";
+    pageText.text = $"Page : {recipe.Page ?? 0}";
+    rateText.text = $"Note : {recipe.Rate}/5";
+    difficultyText.text = $"Difficulté : {recipe.Difficulty}";
 
     remarqueText.text = $"Remarque : {recipe.Remarque?.Trim() ?? ""}";
 }
