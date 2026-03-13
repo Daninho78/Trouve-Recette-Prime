@@ -63,6 +63,10 @@ private async Task LoadRecipesForBook()
             
         }
 }
+    public void ClosePanel()
+    {
+        panelDetails.SetActive(false);
+    }
 
 
 
