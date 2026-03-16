@@ -11,8 +11,11 @@ using JetBrains.Annotations;
 public class UIAjoutBasique : MonoBehaviour
 {
     public TMP_InputField titreLivreInput;
+    public TMP_InputField auteurInput;
+    public TMP_InputField collectionInput;
     public TMP_InputField titreRecetteInput;
     public TMP_InputField ingredientsInput;
+    public GameObject panelAddRecipe;
 
     private Guid currentBookId;
 
@@ -30,7 +33,7 @@ public class UIAjoutBasique : MonoBehaviour
         currentBookId = await SupabaseRPC.InsertBookRPC(titre);
         Debug.Log("Livre créé avec ID : " + currentBookId);
 
-
+        panelAddRecipe.SetActive(true);
     }
 
     public async void AjouterRecette()
@@ -86,17 +89,5 @@ public class UIAjoutBasique : MonoBehaviour
 
     }
 
-    public void AfficherBibliothèque()
-    {
-        bibliothèque.SetActive(!bibliothèque.activeSelf);
-    }
-
-public void FermerPanel(GameObject panel)
-{
-    if (panel != null)
-    {
-        panel.SetActive(false);
-    }
-}
 
 }
