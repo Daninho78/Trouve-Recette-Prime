@@ -24,13 +24,15 @@ public class UIAjoutBasique : MonoBehaviour
     public async void CreerLivre()
     {
         string titre = titreLivreInput.text;
+        string auteur = auteurInput.text;
+        string collection = collectionInput.text;
         if (string.IsNullOrWhiteSpace(titre))
         {
             Debug.LogWarning("Titre du livre vide.");
             return;
         }
 
-        currentBookId = await SupabaseRPC.InsertBookRPC(titre);
+        currentBookId = await SupabaseRPC.InsertBookRPC(titre, auteur, collection);
         Debug.Log("Livre créé avec ID : " + currentBookId);
 
         panelAddRecipe.SetActive(true);

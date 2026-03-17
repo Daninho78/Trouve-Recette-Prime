@@ -10,12 +10,12 @@ public static class SupabaseRPC
     private const string SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0Y2trdHlwcmFleGtocWtlY3hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwODY2NDAsImV4cCI6MjA2MjY2MjY0MH0.K7yOKp-ieqlAzrPoUr9dpeW0NAJ6WkrshFJ6K5EEna0";
  // remplace par ta clé anonyme Supabase
 
-    public static async Task<Guid> InsertBookRPC(string title)
+    public static async Task<Guid> InsertBookRPC(string title, string author, string collection)
     {
         string functionName = "insert_book_return_id";
         string url = $"{SupabaseUrl}/rest/v1/rpc/{functionName}";
 
-        string jsonData = $"{{\"title\": \"{title}\"}}";
+        string jsonData = $"{{\"title\": \"{title}\", \"author\": \"{author}\", \"collection\": \"{collection}\"}}";
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
         using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
