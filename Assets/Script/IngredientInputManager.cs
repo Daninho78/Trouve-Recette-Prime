@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class IngredientInputManager : MonoBehaviour
 {
@@ -26,5 +27,22 @@ public class IngredientInputManager : MonoBehaviour
         // Focus sur le nouveau champ
         newInput.Select();
         newInput.ActivateInputField();
+    }
+
+    public List<string> GetAllIngredients()
+    {
+        List<string> ingredients = new List<string>();
+
+        foreach (Transform child in transform)
+        {
+            TMP_InputField input = child.GetComponent<TMP_InputField>();
+
+            if (input != null && !string.IsNullOrWhiteSpace(input.text))
+            {
+                ingredients.Add(input.text);
+            }
+        }
+
+        return ingredients;
     }
 }

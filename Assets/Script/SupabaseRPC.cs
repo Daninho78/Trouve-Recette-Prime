@@ -64,14 +64,24 @@ else
         }
     }
 
-    public static async Task<Guid> InsertRecipeRPC(Guid bookID, string title, int duration)
+    public static async Task<Guid> InsertRecipeRPC(
+        Guid bookID,
+        string title,
+        int page,
+        int prepTime,
+        int cookTime,
+        int serving,
+        string difficulty,
+        int rate,
+        string remark
+        )
     {
 
         string functionName = "insert_recipe_return_id";
 
         string url = $"{SupabaseUrl}/rest/v1/rpc/{functionName}";
 
-        string jsonData = $"{{\"book_id\":\"{bookID}\",\"title\":\"{title}\",\"duration\":{duration}}}";
+        string jsonData = $"{{\"book_id\":\"{bookID}\",\"title\":\"{title}\",\"page\":{page},\"prep_time\":{prepTime},\"cook_time\":{cookTime},\"serving\":{serving},\"difficulty\":\"{difficulty}\",\"rate\":{rate},\"remark\":\"{remark}\"}}";
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
         using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
