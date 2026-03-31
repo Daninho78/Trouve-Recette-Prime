@@ -20,7 +20,8 @@ public class BookDetailsUI : MonoBehaviour
     {
         panelDetails.SetActive(true);           // On affiche le panel
         titreLivre.text = book.Title;                // On met à jour le titre
-        bookId = book.Id;                            // On garde l'ID du livre sélectionné
+        bookId = book.Id;  // On garde l'ID du livre sélectionné
+        FindObjectOfType<UIAjoutBasique>().SetCurrentBookId(bookId);
         auteurLivre.text = book.Author;
         collectionLivre.text = book.Collection;
 

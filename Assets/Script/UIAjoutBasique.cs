@@ -28,6 +28,7 @@ public class UIAjoutBasique : MonoBehaviour
     private Guid currentBookId;
 
     public GameObject bibliothèque;
+    public GameObject miniPanelAdd;
 
     public async void CreerLivre()
     {
@@ -63,6 +64,7 @@ public class UIAjoutBasique : MonoBehaviour
         string rateText = rateDropdown.options[rateDropdown.value].text;
         string remark = remarqueInput.text;
         string servingText = servingsDropdown.options[servingsDropdown.value].text;
+
 
         int.TryParse(pageText, out int page);
         int.TryParse(prepTimeText, out int prepTime);
@@ -136,19 +138,54 @@ public class UIAjoutBasique : MonoBehaviour
 
         Debug.Log("🎉 Recette et ingrédients enregistrés.");
 
-        ingredientInputManager.ClearInputs();
+        ClearInputs();
 
+        
+
+
+    }
+
+    public void OuvrirAjoutRecette()
+    {
+        if (currentBookId == Guid.Empty)
+        {
+            Debug.LogWarning("Aucun livre sélectionné.");
+            return;
+        }
+
+        panelAddRecipe.SetActive(true);
+        miniPanelAdd.SetActive(false);
+    }
+
+    public void ClearInputs()
+    {
         titreRecetteInput.text = "";
+        pageInput.text = "";
         tempsPreparationInput.text = "";
         tempsCuissonInput.text = "";
-        pageInput.text = "";
         remarqueInput.text = "";
+
         servingsDropdown.value = 0;
         difficulteDropdown.value = 0;
         rateDropdown.value = 0;
 
-
+        // Reset ingrédients
+        ingredientInputManager.ClearInputs();
     }
+
+    public void RetourAjoutLivre()
+    {
+        ClearInputs();
+        currentBookId = Guid.Empty;
+        panelAddRecipe.SetActive(false);
+    }
+
+    public void SetCurrentBookId(Guid bookId)
+    {
+        currentBookId = bookId;
+    }
+
+
 
 
 }
