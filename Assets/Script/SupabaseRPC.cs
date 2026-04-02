@@ -217,6 +217,49 @@ public static async Task<bool> InsertRecipeIngredientRPC(Guid recipeId, Guid ing
     }
 }
 
+    public static async Task<bool> UpdateRecipeRPC(
+    Guid recipeId,
+    string title,
+    int page,
+    int prepTime,
+    int cookTime,
+    int serving,
+    string difficulty,
+    int rate,
+    string remark
+)
+    {
+        string functionName = "update_recipe";
+        string url = $"{SupabaseUrl}/rest/v1/rpc/{functionName}";
+
+        string jsonData = $"{{\"recipe_id\":\"{recipeId}\",\"title\":\"{title}\",\"page\":{page},\"prep_time\":{prepTime},\"cook_time\":{cookTime},\"serving\":{serving},\"difficulty\":\"{difficulty}\",\"rate\":{rate},\"remark\":\"{remark}\"}}";
+
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("apikey", SupabaseKey);
+            request.SetRequestHeader("Authorization", $"Bearer {SupabaseKey}");
+
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Erreur RPC update recette : " + request.error);
+                return false;
+            }
+
+            Debug.Log("✅ Recette mise à jour");
+            return true;
+        }
+    }
+
 
     [Serializable]
     private class IdResponse

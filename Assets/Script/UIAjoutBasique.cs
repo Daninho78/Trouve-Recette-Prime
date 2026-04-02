@@ -30,6 +30,9 @@ public class UIAjoutBasique : MonoBehaviour
     public GameObject bibliothèque;
     public GameObject miniPanelAdd;
 
+    private Guid currentRecipeId = Guid.Empty;
+    private bool isEditing = false;
+
     public async void CreerLivre()
     {
         string titre = titreLivreInput.text;
@@ -89,6 +92,35 @@ public class UIAjoutBasique : MonoBehaviour
         if (hasDuplicate)
         {
             Debug.LogWarning("La recette contient des ingrédients en double.");
+            return;
+        }
+
+        if (isEditing)
+        {
+            bool success = await SupabaseRPC.UpdateRecipeRPC(
+                currentRecipeId,
+                titreRecette,
+                page,
+                prepTime,
+                cookTime,
+                serving,
+                difficulty,
+                rate,
+                remark
+            );
+
+            if (!success)
+            {
+                Debug.LogWarning("La recette n'a pas été mise à jour.");
+                return;
+            }
+
+            Debug.Log("✅ Recette mise à jour avec succès");
+
+            isEditing = false;
+            currentRecipeId = Guid.Empty;
+            ClearInputs();
+            panelAddRecipe.SetActive(false);
             return;
         }
 
@@ -183,6 +215,29 @@ public class UIAjoutBasique : MonoBehaviour
     public void SetCurrentBookId(Guid bookId)
     {
         currentBookId = bookId;
+    }
+
+    public void EditRecipe(Recipe recipe)
+    {
+        isEditing = true;
+        currentRecipeId = recipe.Id;
+
+        // Remplir les champs
+        titreRecetteInput.text = recipe.Title;
+        pageInput.text = recipe.Page.ToString();
+        tempsPreparationInput.text = recipe.PrepTimeMinutes.ToString();
+        tempsCuissonInput.text = recipe.CookTimeMinutes.ToString();
+        remarqueInput.text = recipe.Remarque;
+
+        // Dropdowns
+        servingsDropdown.value = (int)recipe.Serving;
+        difficulteDropdown.value = difficulteDropdown.options
+            .FindIndex(o => o.text == recipe.Difficulty);
+        rateDropdown.value = recipe.Rate;
+
+        
+
+        panelAddRecipe.SetActive(true);
     }
 
 

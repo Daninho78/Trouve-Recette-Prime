@@ -22,6 +22,7 @@ public class RecipeDetailUI : MonoBehaviour
     [SerializeField] private TMP_Text pageText;
     [SerializeField] private TMP_Text difficultyText;
     [SerializeField] private TMP_Text remarqueText;
+    private Recipe currentRecipe;
 
 
     private Guid recipeId;
@@ -31,6 +32,7 @@ public class RecipeDetailUI : MonoBehaviour
         panelDetails.SetActive(true);
         titreRecette.text = recipe.Title;
         recipeId = recipe.Id;
+        currentRecipe = recipe;
 
         DisplayInfo(recipe);
 
@@ -75,7 +77,7 @@ public class RecipeDetailUI : MonoBehaviour
     }
 
     private void DisplayInfo(Recipe recipe)
-{
+    {
     string temps = "";
 
     temps += $"Préparation : {recipe.PrepTimeMinutes ?? 0} min\n";
@@ -94,10 +96,10 @@ public class RecipeDetailUI : MonoBehaviour
     difficultyText.text = $"Difficulté : {recipe.Difficulty}";
 
     remarqueText.text = $"Remarque : {recipe.Remarque?.Trim() ?? ""}";
-}
+    }
 
-private string BuildIngredientLine(IngredientLine ingr)
-{
+    private string BuildIngredientLine(IngredientLine ingr)
+    {
     // priorité à QuantityText (ex: "1 pincée", "un peu", "à volonté")
     if (!string.IsNullOrWhiteSpace(ingr.QuantityText))
         return $"{ingr.QuantityText} {ingr.Name}".Trim();
@@ -111,10 +113,16 @@ private string BuildIngredientLine(IngredientLine ingr)
 
     // sinon juste le nom
     return ingr.Name;
-}
+    }
     
     public void FermerPanel()
-{
+    {
     panelDetails.SetActive(false);
-}
+    }
+
+    public void ModifierRecette()
+    {
+        panelDetails.SetActive(false);
+        FindObjectOfType<UIAjoutBasique>().EditRecipe(currentRecipe);
+    }
 }
