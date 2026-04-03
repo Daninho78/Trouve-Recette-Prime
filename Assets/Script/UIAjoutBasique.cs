@@ -97,6 +97,7 @@ public class UIAjoutBasique : MonoBehaviour
 
         if (isEditing)
         {
+
             bool success = await SupabaseRPC.UpdateRecipeRPC(
                 currentRecipeId,
                 titreRecette,
@@ -121,6 +122,12 @@ public class UIAjoutBasique : MonoBehaviour
             currentRecipeId = Guid.Empty;
             ClearInputs();
             panelAddRecipe.SetActive(false);
+
+            FindObjectOfType<BookDetailsUI>().ShowDetails(new Book
+            {
+                Id = currentBookId
+            });
+            
             return;
         }
 
