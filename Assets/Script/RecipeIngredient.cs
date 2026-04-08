@@ -14,8 +14,8 @@ public class RecipeIngredient : BaseModel
     [Column("quantity")]
     public decimal? Quantity { get; set; }
 
-    [Column("unity")]
-    public string Unity { get; set; }
+    [Column("unit")]
+    public string Unit { get; set; }
 
     [Column("quantity_text")]
     public string QuantityText { get; set; }

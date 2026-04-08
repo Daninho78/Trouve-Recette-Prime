@@ -100,21 +100,22 @@ public class RecipeDetailUI : MonoBehaviour
 
     private string BuildIngredientLine(IngredientLine ingr)
     {
-    // priorité à QuantityText (ex: "1 pincée", "un peu", "à volonté")
-    if (!string.IsNullOrWhiteSpace(ingr.QuantityText))
-        return $"{ingr.QuantityText} {ingr.Name}".Trim();
+        // Cas spécial : "une pincée sel"
+        if (!string.IsNullOrWhiteSpace(ingr.QuantityText))
+            return $"{ingr.QuantityText} {ingr.Name}".Trim();
 
-    // sinon Quantity + Unity (ex: 200 g)
-    if (ingr.Quantity != null)
-    {
-        string unit = ingr.Unity ?? "";
-        return $"{ingr.Quantity} {unit} {ingr.Name}".Trim();
+        // Cas normal avec quantité + unité : "200 g farine"
+        if (ingr.Quantity > 0 && !string.IsNullOrWhiteSpace(ingr.Unity))
+            return $"{ingr.Quantity} {ingr.Unity} {ingr.Name}".Trim();
+
+        // Cas quantité sans unité : "200 farine"
+        if (ingr.Quantity > 0)
+            return $"{ingr.Quantity} {ingr.Name}".Trim();
+
+        // Sinon juste le nom
+        return ingr.Name;
     }
 
-    // sinon juste le nom
-    return ingr.Name;
-    }
-    
     public void FermerPanel()
     {
     panelDetails.SetActive(false);

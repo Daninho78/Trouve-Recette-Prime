@@ -55,10 +55,9 @@ public static class RecipeService
         IngredientId = ing.Id,
         Name = ing.Name,
 
-        // pour l’instant on met vide / null,
-        // on branchera quantity/unit/quantity_text juste après
+      
         Quantity = liaison.Quantity,
-        Unity = liaison.Unity,
+        Unity = liaison.Unit,
         QuantityText = liaison.QuantityText
     });
 }

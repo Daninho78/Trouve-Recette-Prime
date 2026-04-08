@@ -184,14 +184,26 @@ else
     return Guid.Empty;
 }
 
-public static async Task<bool> InsertRecipeIngredientRPC(Guid recipeId, Guid ingredientId)
+public static async Task<bool> InsertRecipeIngredientRPC(
+    Guid recipeId,
+    Guid ingredientId,
+    int quantity,
+    string unit,
+    string quantityText
+    )
 {
     string functionName = "insert_recipe_ingredient";
 
     string url = $"{SupabaseUrl}/rest/v1/rpc/{functionName}";
 
-    string jsonData = $"{{\"recipe_id\":\"{recipeId}\",\"ingredient_id\":\"{ingredientId}\"}}";
-    byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+        string jsonData = $"{{" +
+    $"\"recipe_id\":\"{recipeId}\"," +
+    $"\"ingredient_id\":\"{ingredientId}\"," +
+    $"\"quantity\":{quantity}," +
+    $"\"unit\":\"{unit}\"," +
+    $"\"quantity_text\":\"{quantityText}\"" +
+    $"}}";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
 
     using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
     {

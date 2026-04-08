@@ -81,10 +81,10 @@ public class UIAjoutBasique : MonoBehaviour
             return;
         }
 
-        List<string> ingredients = ingredientInputManager.GetAllIngredients();
+        var ingredients = ingredientInputManager.GetAllIngredients();
         //verifie qu'il n'y a pas doublons dans la liste des ingredients
         var ingredientsNormalises = ingredients
-    .Select(i => i.Trim().ToLower())
+    .Select(i => i.name.Trim().ToLower())
     .ToList();
 
         bool hasDuplicate = ingredientsNormalises.Count != ingredientsNormalises.Distinct().Count();
@@ -154,9 +154,9 @@ public class UIAjoutBasique : MonoBehaviour
 
         
 
-        foreach (string ingredientBrut in ingredients)
+        foreach (var ingredient in ingredients)
         {
-            string nomNettoye = ingredientBrut.Trim().ToLower();
+            string nomNettoye = ingredient.name.Trim().ToLower();
 
             if (!string.IsNullOrEmpty(nomNettoye))
             {
@@ -165,7 +165,13 @@ public class UIAjoutBasique : MonoBehaviour
 
                 if (ingredientId != Guid.Empty)
                 {
-                    await SupabaseRPC.InsertRecipeIngredientRPC(recetteId, ingredientId);
+                    await SupabaseRPC.InsertRecipeIngredientRPC(
+                        recetteId,
+                        ingredientId,
+                        ingredient.quantity,
+                        ingredient.unit,
+                        ingredient.quantityText
+                        );
                     Debug.Log("🔗 Ingrédient lié : " + nomNettoye);
                 }
                 else

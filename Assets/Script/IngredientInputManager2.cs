@@ -1,15 +1,22 @@
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 
 public class IngredientInputManager2 : MonoBehaviour
 {
-    public TMP_InputField inputPrefab;
+    public GameObject ingredientItemPrefab;
 
-    public TMP_InputField CreateNewInput()
+    public GameObject CreateNewInput()
     {
-        TMP_InputField newInput = Instantiate(inputPrefab, transform);
-        newInput.text = "";
+        GameObject newInput = Instantiate(ingredientItemPrefab, transform);
+        var data = newInput.GetComponent<IngredientInputData>();
+
+        data.quantityInput.text = "";
+        data.nameInput.text = "";
+        data.customQuantityInput.text = "";
+        data.customQuantityInput.gameObject.SetActive(false);
+        data.unitDropdown.value = 0;
         return newInput;
     }
 
@@ -18,30 +25,52 @@ public class IngredientInputManager2 : MonoBehaviour
         if (string.IsNullOrWhiteSpace(currentInput.text))
             return;
 
-        if (currentInput.transform.GetSiblingIndex() != transform.childCount - 1)
+        Transform ingredientItem = currentInput.transform.parent.parent;
+
+        if (ingredientItem.GetSiblingIndex() != transform.childCount - 1)
             return;
 
-        TMP_InputField newInput = CreateNewInput();
-        newInput.Select();
-        newInput.ActivateInputField();
+        GameObject newItem = CreateNewInput();
+
+        var data = newItem.GetComponent<IngredientInputData>();
+        data.nameInput.Select();
+        data.nameInput.ActivateInputField();
     }
 
-    public List<string> GetAllIngredients()
-    {
-        List<string> ingredients = new List<string>();
-
-        foreach (Transform child in transform)
+   
+     public List<(string name, int quantity, string unit, string quantityText)> GetAllIngredients()
         {
-            TMP_InputField input = child.GetComponent<TMP_InputField>();
+            List<(string, int, string, string)> ingredients = new();
 
-            if (input != null && !string.IsNullOrWhiteSpace(input.text))
+            foreach (Transform child in transform)
             {
-                ingredients.Add(input.text);
-            }
-        }
+                var data = child.GetComponent<IngredientInputData>();
+                if (data == null) continue;
 
-        return ingredients;
-    }
+                string name = data.nameInput.text;
+
+                if (string.IsNullOrWhiteSpace(name))
+                    continue;
+
+                string selectedUnit = data.unitDropdown.options[data.unitDropdown.value].text;
+
+                if (selectedUnit == "Autre")
+                {
+                    string quantityText = data.customQuantityInput.text;
+
+                    ingredients.Add((name, 0, null, quantityText));
+                }
+                else
+                {
+                    int.TryParse(data.quantityInput.text, out int quantity);
+
+                    ingredients.Add((name, quantity, selectedUnit, null));
+                }
+            }
+
+            return ingredients;
+     }
+    
 
     public void ClearInputs()
     {
@@ -70,4 +99,19 @@ public class IngredientInputManager2 : MonoBehaviour
         }
 
     }
+
+    public void OnUnitChanged(TMP_Dropdown dropdown, GameObject customInput)
+    {
+        string selected = dropdown.options[dropdown.value].text;
+
+        if (selected == "Autre...")
+        {
+            customInput.SetActive(true);
+        }
+        else
+        {
+            customInput.SetActive(false);
+        }
+    }
+
 }
