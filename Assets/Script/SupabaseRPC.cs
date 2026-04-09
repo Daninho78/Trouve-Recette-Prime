@@ -272,6 +272,37 @@ public static async Task<bool> InsertRecipeIngredientRPC(
         }
     }
 
+    public static async Task DeleteRecipeIngredientsRPC(Guid recipeId)
+    {
+        string functionName = "delete_recipe_ingredients";
+        string url = $"{SupabaseUrl}/rest/v1/rpc/{functionName}";
+
+        string jsonData = $"{{\"recipe_id\":\"{recipeId}\"}}";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("apikey", SupabaseKey);
+            request.SetRequestHeader("Authorization", $"Bearer {SupabaseKey}");
+
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Erreur RPC delete ingrédients recette : " + request.error);
+                return;
+            }
+
+            Debug.Log("🗑️ Ingrédients de la recette supprimés");
+        }
+    }
+
 
     [Serializable]
     private class IdResponse

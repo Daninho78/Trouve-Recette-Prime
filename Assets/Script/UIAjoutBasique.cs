@@ -98,6 +98,15 @@ public class UIAjoutBasique : MonoBehaviour
         if (isEditing)
         {
 
+            var ingredientsEdit = ingredientInputManager.GetAllIngredients();
+
+            Debug.Log("Ingrédients récupérés en édition : " + ingredientsEdit.Count);
+
+            foreach (var ingr in ingredientsEdit)
+            {
+                Debug.Log($"EDIT INGREDIENT -> name: {ingr.name}, quantity: {ingr.quantity}, unit: {ingr.unit}, quantityText: {ingr.quantityText}");
+            }
+
             bool success = await SupabaseRPC.UpdateRecipeRPC(
                 currentRecipeId,
                 titreRecette,
@@ -109,6 +118,29 @@ public class UIAjoutBasique : MonoBehaviour
                 rate,
                 remark
             );
+
+            await SupabaseRPC.DeleteRecipeIngredientsRPC(currentRecipeId);
+
+            foreach (var ingr in ingredientsEdit)
+            {
+                string nomNettoye = ingr.name.Trim().ToLower();
+
+                if (!string.IsNullOrEmpty(nomNettoye))
+                {
+                    var ingredientId = await SupabaseRPC.InsertIngredientRPC(nomNettoye);
+
+                    if (ingredientId != Guid.Empty)
+                    {
+                        await SupabaseRPC.InsertRecipeIngredientRPC(
+                            currentRecipeId,
+                            ingredientId,
+                            ingr.quantity,
+                            ingr.unit,
+                            ingr.quantityText
+                        );
+                    }
+                }
+            }
 
             if (!success)
             {
@@ -230,7 +262,7 @@ public class UIAjoutBasique : MonoBehaviour
         currentBookId = bookId;
     }
 
-    public void EditRecipe(Recipe recipe)
+    public async void EditRecipe(Recipe recipe)
     {
         isEditing = true;
         currentRecipeId = recipe.Id;
@@ -251,6 +283,64 @@ public class UIAjoutBasique : MonoBehaviour
         
 
         panelAddRecipe.SetActive(true);
+
+        Debug.Log("EditRecipe appelée pour : " + recipe.Title);
+
+        var ingredients = await RecipeService.GetIngredientsByRecipe(recipe.Id);
+        Debug.Log("Nombre d'ingrédients récupérés : " + ingredients.Count);
+
+        ingredientInputManager.ClearInputs();
+
+        var firstItem = ingredientInputManager.transform.GetChild(0).GetComponent<IngredientInputData>();
+
+        if (ingredients.Count > 0)
+        {
+            var ingr = ingredients[0];
+
+            firstItem.nameInput.text = ingr.Name;
+            firstItem.quantityInput.text = ingr.Quantity.ToString();
+
+            
+            if (!string.IsNullOrWhiteSpace(ingr.Unity))
+            {
+                int unitIndex = firstItem.unitDropdown.options.FindIndex(o => o.text == ingr.Unity);
+                if (unitIndex >= 0)
+                    firstItem.unitDropdown.value = unitIndex;
+            }
+
+            if (!string.IsNullOrWhiteSpace(ingr.QuantityText))
+            {
+                firstItem.customQuantityInput.gameObject.SetActive(true);
+                firstItem.customQuantityInput.text = ingr.QuantityText;
+            }
+        }
+
+
+
+        for (int i = 1; i < ingredients.Count; i++)
+        {
+            var ingr = ingredients[i];
+            GameObject newItem = ingredientInputManager.CreateNewInput();
+            var data = newItem.GetComponent<IngredientInputData>();
+
+            data.nameInput.text = ingr.Name;
+            data.quantityInput.text = ingr.Quantity.ToString();
+
+            if (!string.IsNullOrWhiteSpace(ingr.Unity))
+            {
+                int unitIndex = data.unitDropdown.options.FindIndex(o => o.text == ingr.Unity);
+                if (unitIndex >= 0)
+                    data.unitDropdown.value = unitIndex;
+            }
+
+            if (!string.IsNullOrWhiteSpace(ingr.QuantityText))
+            {
+                data.customQuantityInput.gameObject.SetActive(true);
+                data.customQuantityInput.text = ingr.QuantityText;
+            }
+        }
+
+        ingredientInputManager.CreateNewInput();
     }
 
 

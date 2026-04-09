@@ -11,4 +11,9 @@ public class IngredientItemUI : MonoBehaviour
         string selected = unitDropdown.options[unitDropdown.value].text;
         customQuantityInput.SetActive(selected == "Autre");
     }
+
+    public void RemoveItem()
+    {
+        Destroy(gameObject);
+    }
 }
