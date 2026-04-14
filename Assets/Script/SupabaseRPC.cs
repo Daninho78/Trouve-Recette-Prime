@@ -303,6 +303,130 @@ public static async Task<bool> InsertRecipeIngredientRPC(
         }
     }
 
+    public static async Task DeleteRecipeRPC(Guid recipeId)
+    {
+        string functionName = "delete_recipe";
+        string url = $"{SupabaseUrl}/rest/v1/rpc/{functionName}";
+
+        string jsonData = $"{{\"recipe_id\":\"{recipeId}\"}}";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("apikey", SupabaseKey);
+            request.SetRequestHeader("Authorization", $"Bearer {SupabaseKey}");
+
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Erreur RPC suppression recette : " + request.error);
+                return;
+            }
+
+            Debug.Log("🗑️ Recette supprimée");
+        }
+    }
+
+    public static async Task DeleteBookRecipesIngredientsRPC(Guid bookId)
+    {
+        string functionName = "delete_book_recipes_ingredients";
+        string url = $"{SupabaseUrl}/rest/v1/rpc/{functionName}";
+
+        string jsonData = $"{{\"book_id\":\"{bookId}\"}}";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("apikey", SupabaseKey);
+            request.SetRequestHeader("Authorization", $"Bearer {SupabaseKey}");
+
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Erreur RPC suppression ingrédients des recettes du livre : " + request.error);
+                return;
+            }
+
+            Debug.Log("🗑️ Ingrédients des recettes du livre supprimés");
+        }
+    }
+
+    public static async Task DeleteBookRecipesRPC(Guid bookId)
+    {
+        string functionName = "delete_book_recipes";
+        string url = $"{SupabaseUrl}/rest/v1/rpc/{functionName}";
+
+        string jsonData = $"{{\"book_id\":\"{bookId}\"}}";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("apikey", SupabaseKey);
+            request.SetRequestHeader("Authorization", $"Bearer {SupabaseKey}");
+
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Erreur RPC suppression recettes du livre : " + request.error);
+                return;
+            }
+
+            Debug.Log("🗑️ Recettes du livre supprimées");
+        }
+    }
+
+    public static async Task DeleteBookRPC(Guid bookId)
+    {
+        string functionName = "delete_book";
+        string url = $"{SupabaseUrl}/rest/v1/rpc/{functionName}";
+
+        string jsonData = $"{{\"book_id\":\"{bookId}\"}}";
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("apikey", SupabaseKey);
+            request.SetRequestHeader("Authorization", $"Bearer {SupabaseKey}");
+
+            var operation = request.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
+
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Erreur RPC suppression livre : " + request.error);
+                return;
+            }
+
+            Debug.Log("🗑️ Livre supprimé");
+        }
+    }
+
 
     [Serializable]
     private class IdResponse

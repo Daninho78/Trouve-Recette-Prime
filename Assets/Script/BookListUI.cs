@@ -37,4 +37,16 @@ public class BookListUI : MonoBehaviour
             }
         }
     }
+
+    public async void RefreshBooks()
+    {
+        foreach (Transform child in contentParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        await AfficherTousLesLivres();
+    }
+
+
 }

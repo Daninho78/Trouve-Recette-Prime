@@ -64,6 +64,16 @@ private async Task LoadRecipesForBook()
             
         }
 }
+
+    public async void SupprimerLivre()
+    {
+        await SupabaseRPC.DeleteBookRecipesIngredientsRPC(bookId);
+        await SupabaseRPC.DeleteBookRecipesRPC(bookId);
+        await SupabaseRPC.DeleteBookRPC(bookId);
+
+        FindObjectOfType<BookListUI>().RefreshBooks();
+        panelDetails.SetActive(false);
+    }
     public void ClosePanel()
     {
         panelDetails.SetActive(false);

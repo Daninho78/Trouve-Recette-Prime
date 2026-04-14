@@ -126,4 +126,16 @@ public class RecipeDetailUI : MonoBehaviour
         panelDetails.SetActive(false);
         FindObjectOfType<UIAjoutBasique>().EditRecipe(currentRecipe);
     }
+
+    public async void SupprimerRecette()
+    {
+        await SupabaseRPC.DeleteRecipeIngredientsRPC(currentRecipe.Id);
+        await SupabaseRPC.DeleteRecipeRPC(currentRecipe.Id);
+
+        panelDetails.SetActive(false);
+        FindObjectOfType<BookDetailsUI>().ShowDetails(new Book
+        {
+            Id = currentRecipe.BookId
+        });
+    }
 }
