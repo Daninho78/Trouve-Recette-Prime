@@ -11,6 +11,7 @@ public class UINavigation : MonoBehaviour
     public GameObject miniPanelAdd;
     public GameObject panelAddBook;
     public GameObject panelAddRecipe;
+    public GameObject panelSearch;
    
 
     void CloseAllPanels()
@@ -22,6 +23,8 @@ public class UINavigation : MonoBehaviour
         miniPanelAdd.SetActive(false);
         panelAddBook.SetActive(false);
         panelAddRecipe.SetActive(false);
+        panelSearch.SetActive(false);
+        
     }
 
     public void OpenHome()
@@ -47,6 +50,11 @@ public class UINavigation : MonoBehaviour
         panelAddBook .SetActive(true);
     }
 
+    public void openSearch()
+    {
+        CloseAllPanels ();
+        panelSearch .SetActive(true);
+    }
 
 
     

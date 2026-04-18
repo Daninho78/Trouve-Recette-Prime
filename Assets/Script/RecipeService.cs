@@ -139,4 +139,21 @@ public static class RecipeService
 
         return recettesTrouvées;
     }
+
+    public static async Task<List<Recipe>> GetAllRecipes()
+    {
+        try
+        {
+            var result = await Supabase.Client.Instance
+                .From<Recipe>()
+                .Get();
+
+            return result.Models;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Erreur lors du chargement des recettes : " + ex.Message);
+            return new List<Recipe>();
+        }
+    }
 }
