@@ -1,6 +1,7 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -14,9 +15,17 @@ public class SearchUI : MonoBehaviour
 
     public GameObject noResultText;
 
-    public async void OnSearchClicked()
+    private List<Recipe> cachedRecipes = new List<Recipe>();
+    private Dictionary<Guid, Book> cachedBooks = new Dictionary<Guid, Book>();
+    private Dictionary<Guid, List<IngredientLine>> cachedIngredients = new Dictionary<Guid, List<IngredientLine>>();
+
+    private async void Start()
     {
-        var recipes = await RecipeService.GetAllRecipes();
+        await LoadCache();
+    }
+    public void OnSearchClicked()
+    {
+        var recipes = cachedRecipes;
 
         string search = searchInput.text.ToLower();
 
@@ -29,8 +38,12 @@ public class SearchUI : MonoBehaviour
 
         foreach (var recipe in recipes)
         {
-            var book = await BookService.GetBookById(recipe.BookId);
-            var ingredients = await RecipeService.GetIngredientsByRecipe(recipe.Id);
+            Book book = cachedBooks.ContainsKey(recipe.BookId)
+    ? cachedBooks[recipe.BookId]
+    : null;
+            var ingredients = cachedIngredients.ContainsKey(recipe.Id)
+    ? cachedIngredients[recipe.Id]
+    : new List<IngredientLine>();
 
             string texteRecherche = recipe.Title.ToLower();
 
@@ -74,5 +87,28 @@ public class SearchUI : MonoBehaviour
         noResultText.SetActive(resultats.Count == 0);
 
         Debug.Log("Résultats trouvés : " + resultats.Count);
+    }
+
+    private async Task LoadCache()
+    {
+        cachedRecipes = await RecipeService.GetAllRecipes();
+
+        foreach (var recipe in cachedRecipes)
+        {
+            if (!cachedBooks.ContainsKey(recipe.BookId))
+            {
+                var book = await BookService.GetBookById(recipe.BookId);
+                if (book != null)
+                    cachedBooks.Add(recipe.BookId, book);
+            }
+
+            if (!cachedIngredients.ContainsKey(recipe.Id))
+            {
+                var ingredients = await RecipeService.GetIngredientsByRecipe(recipe.Id);
+                cachedIngredients.Add(recipe.Id, ingredients);
+            }
+        }
+
+        Debug.Log("Cache chargé : " + cachedRecipes.Count + " recettes");
     }
 }
