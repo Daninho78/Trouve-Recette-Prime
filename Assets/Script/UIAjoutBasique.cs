@@ -275,7 +275,8 @@ public class UIAjoutBasique : MonoBehaviour
         remarqueInput.text = recipe.Remarque;
 
         // Dropdowns
-        servingsDropdown.value = (int)recipe.Serving;
+        int serving = recipe.Serving ?? 0;
+        servingsDropdown.value = serving;
         difficulteDropdown.value = difficulteDropdown.options
             .FindIndex(o => o.text == recipe.Difficulty);
         rateDropdown.value = recipe.Rate;

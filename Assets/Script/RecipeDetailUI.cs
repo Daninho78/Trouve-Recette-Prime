@@ -29,6 +29,8 @@ public class RecipeDetailUI : MonoBehaviour
 
     public async void ShowDetails(Recipe recipe)//string titre, Guid id)
     {
+        ingredientsText.text = "";
+
         panelDetails.SetActive(true);
         titreRecette.text = recipe.Title;
         recipeId = recipe.Id;
@@ -42,9 +44,8 @@ public class RecipeDetailUI : MonoBehaviour
     private async Task LoadIngredientsForRecipe()
     {
         Debug.Log("Chargement des ingredients pour la recette ID : " + recipeId);
-        // Supprimer les anciens ingrédients affichés
-        //foreach (Transform child in contentIngredients)
-           // Destroy(child.gameObject);
+
+        ingredientsText.text = "Ingrédients\n\n";
 
         // Récupérer les ingrédients via Supabase
         List<IngredientLine> ingredients = await RecipeService.GetIngredientsByRecipe(recipeId);

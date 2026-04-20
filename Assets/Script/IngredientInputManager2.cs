@@ -33,8 +33,8 @@ public class IngredientInputManager2 : MonoBehaviour
         GameObject newItem = CreateNewInput();
 
         var data = newItem.GetComponent<IngredientInputData>();
-        data.nameInput.Select();
-        data.nameInput.ActivateInputField();
+        data.quantityInput.Select();
+        data.quantityInput.ActivateInputField();
     }
 
    
