@@ -30,11 +30,13 @@ public class IngredientInputManager2 : MonoBehaviour
         if (ingredientItem.GetSiblingIndex() != transform.childCount - 1)
             return;
 
-        GameObject newItem = CreateNewInput();
+        // On crée une nouvelle ligne vide en dessous
+        CreateNewInput();
 
-        var data = newItem.GetComponent<IngredientInputData>();
-        data.quantityInput.Select();
-        data.quantityInput.ActivateInputField();
+        // Mais on garde le focus sur la quantité de la ligne actuelle
+        var currentData = ingredientItem.GetComponent<IngredientInputData>();
+        currentData.quantityInput.Select();
+        currentData.quantityInput.ActivateInputField();
     }
 
    
