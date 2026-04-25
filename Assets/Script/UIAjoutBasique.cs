@@ -155,11 +155,26 @@ public class UIAjoutBasique : MonoBehaviour
             ClearInputs();
             panelAddRecipe.SetActive(false);
 
-            FindObjectOfType<BookDetailsUI>().ShowDetails(new Book
+            BookDetailsUI bookDetails = FindObjectOfType<BookDetailsUI>();
+
+            if (bookDetails != null)
             {
-                Id = currentBookId
-            });
-            
+                bookDetails.ShowDetails(new Book
+                {
+                    Id = currentBookId
+                });
+            }
+            else
+            {
+                SearchUI searchUI = FindObjectOfType<SearchUI>();
+
+                if (searchUI != null)
+                {
+                    await searchUI.LoadCache();
+                    searchUI.OnSearchClicked();
+                }
+            }
+
             return;
         }
 
@@ -264,6 +279,8 @@ public class UIAjoutBasique : MonoBehaviour
 
     public async void EditRecipe(Recipe recipe)
     {
+        SetCurrentBookId(recipe.BookId);
+
         isEditing = true;
         currentRecipeId = recipe.Id;
 

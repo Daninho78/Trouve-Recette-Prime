@@ -168,7 +168,7 @@ public class SearchUI : MonoBehaviour
         Debug.Log("Résultats trouvés : " + resultats.Count);
     }
 
-    private async Task LoadCache()
+    public async Task LoadCache()
     {
         cachedRecipes = await RecipeService.GetAllRecipes();
 
