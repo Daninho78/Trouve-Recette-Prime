@@ -12,6 +12,7 @@ public class UINavigation : MonoBehaviour
     public GameObject panelAddBook;
     public GameObject panelAddRecipe;
     public GameObject panelSearch;
+    public GameObject panelFilter;
    
 
     void CloseAllPanels()
@@ -24,6 +25,7 @@ public class UINavigation : MonoBehaviour
         panelAddBook.SetActive(false);
         panelAddRecipe.SetActive(false);
         panelSearch.SetActive(false);
+        panelFilter.SetActive(false);
         
     }
 
@@ -54,6 +56,11 @@ public class UINavigation : MonoBehaviour
     {
         CloseAllPanels ();
         panelSearch .SetActive(true);
+    }
+
+    public void openFilterSearch()
+    {
+        panelFilter .SetActive(!panelFilter.activeSelf);
     }
 
 

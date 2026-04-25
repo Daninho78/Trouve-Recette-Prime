@@ -19,6 +19,11 @@ public class SearchUI : MonoBehaviour
     private Dictionary<Guid, Book> cachedBooks = new Dictionary<Guid, Book>();
     private Dictionary<Guid, List<IngredientLine>> cachedIngredients = new Dictionary<Guid, List<IngredientLine>>();
 
+    public TMP_Dropdown timeFilterDropdown;
+    public TMP_Dropdown rateFilterDropdown;
+    public TMP_Dropdown difficultyFilterDropdown;
+    public TMP_InputField excludeInput;
+
     private async void Start()
     {
         await LoadCache();
@@ -28,6 +33,64 @@ public class SearchUI : MonoBehaviour
         var recipes = cachedRecipes;
 
         string search = searchInput.text.ToLower();
+        string excludeSearch = excludeInput.text.ToLower();
+
+        var excludeMots = excludeSearch
+            .Split(' ')
+            .Where(m => !string.IsNullOrWhiteSpace(m))
+            .ToArray();
+
+        int selectedTimeIndex = timeFilterDropdown.value;
+        int maxTime = 0;
+
+        switch (selectedTimeIndex)
+        {
+            case 1:
+                maxTime = 15;
+                break;
+            case 2:
+                maxTime = 30;
+                break;
+            case 3:
+                maxTime = 45;
+                break;
+            case 4:
+                maxTime = 60;
+                break;
+        }
+
+        int selectedRateIndex = rateFilterDropdown.value;
+
+        int minRate = 0;
+
+        switch (selectedRateIndex)
+{
+        case 1:
+        minRate = 3;
+        break;
+        case 2:
+        minRate = 4;
+        break;
+        case 3:
+        minRate = 5;
+        break;
+}
+        int selectedDifficultyIndex = difficultyFilterDropdown.value;
+
+        string selectedDifficulty = "";
+
+        switch (selectedDifficultyIndex)
+        {
+            case 1:
+                selectedDifficulty = "Facile";
+                break;
+            case 2:
+                selectedDifficulty = "Intermédiaire";
+                break;
+            case 3:
+                selectedDifficulty = "Difficile";
+                break;
+        }
 
         var mots = search
             .Split(' ')
@@ -62,6 +125,22 @@ public class SearchUI : MonoBehaviour
 
             if (mots.All(m => texteRecherche.Contains(m)))
             {
+                if (excludeMots.Any(m => texteRecherche.Contains(m)))
+                {
+                    continue;
+                }
+                if (maxTime > 0 && recipe.PrepTimeMinutes + recipe.CookTimeMinutes > maxTime)
+                {
+                    continue;
+                }
+                if (minRate > 0 && recipe.Rate < minRate)
+                {
+                    continue;
+                }
+                if (!string.IsNullOrEmpty(selectedDifficulty) && recipe.Difficulty != selectedDifficulty)
+                {
+                    continue;
+                }
                 resultats.Add(recipe);
             }
         }
