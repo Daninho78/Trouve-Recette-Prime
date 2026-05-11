@@ -24,12 +24,20 @@ public class SearchUI : MonoBehaviour
     public TMP_Dropdown difficultyFilterDropdown;
     public TMP_InputField excludeInput;
 
+    private bool cacheReady = false;
+
     private async void Start()
     {
         await LoadCache();
     }
-    public void OnSearchClicked()
+    public async void OnSearchClicked()
     {
+        if (!cacheReady)
+        {
+            Debug.Log("Attente du chargement du cache...");
+            await LoadCache();
+        }
+
         var recipes = cachedRecipes;
 
         string search = searchInput.text.ToLower();
@@ -188,6 +196,8 @@ public class SearchUI : MonoBehaviour
             }
         }
 
+        cacheReady = true;
         Debug.Log("Cache chargé : " + cachedRecipes.Count + " recettes");
+
     }
 }

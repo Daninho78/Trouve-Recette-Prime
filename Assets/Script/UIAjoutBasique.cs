@@ -47,6 +47,8 @@ public class UIAjoutBasique : MonoBehaviour
         currentBookId = await SupabaseRPC.InsertBookRPC(titre, auteur, collection);
         Debug.Log("Livre créé avec ID : " + currentBookId);
 
+        ClearBookInputs();
+
         panelAddRecipe.SetActive(true);
     }
 
@@ -263,6 +265,13 @@ public class UIAjoutBasique : MonoBehaviour
 
         // Reset ingrédients
         ingredientInputManager.ClearInputs();
+    }
+
+    private void ClearBookInputs()
+    {
+        titreLivreInput.text = "";
+        auteurInput.text = "";
+        collectionInput.text = "";
     }
 
     public void RetourAjoutLivre()

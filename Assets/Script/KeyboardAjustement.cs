@@ -1,25 +1,21 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KeyboardAdjuster : MonoBehaviour
 {
-    public RectTransform panel;
+    public LayoutElement keyboardSpacer;
 
-    private Vector2 originalPos;
-
-    void Start()
-    {
-        originalPos = panel.anchoredPosition;
-    }
+    public float keyboardSpaceHeight = 350f;
 
     void Update()
     {
         if (TouchScreenKeyboard.visible)
         {
-            panel.anchoredPosition = new Vector2(originalPos.x, 300);
+            keyboardSpacer.preferredHeight = keyboardSpaceHeight;
         }
         else
         {
-            panel.anchoredPosition = originalPos;
+            keyboardSpacer.preferredHeight = 0f;
         }
     }
 }

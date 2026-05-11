@@ -39,6 +39,7 @@ public class UINavigation : MonoBehaviour
     {
         CloseAllPanels();
         panelLibrary.SetActive(true);
+        FindObjectOfType<BookListUI>().RefreshBooks();
     }
 
     public void ToggleMenuAdd()
