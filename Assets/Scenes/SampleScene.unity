@@ -15677,6 +15677,7 @@ GameObject:
   - component: {fileID: 1327442945}
   - component: {fileID: 1327442944}
   - component: {fileID: 1327442946}
+  - component: {fileID: 1327442947}
   m_Layer: 0
   m_Name: App Manager
   m_TagString: Untagged
@@ -15747,6 +15748,18 @@ MonoBehaviour:
   panelAddRecipe: {fileID: 1717948475}
   panelSearch: {fileID: 991121577}
   panelFilter: {fileID: 2017341561}
+--- !u!114 &1327442947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327442943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 109f47a0c90345449a679375e5b61148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1342154971
 GameObject:
   m_ObjectHideFlags: 0
