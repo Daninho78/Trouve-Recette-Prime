@@ -9,6 +9,8 @@ public class BookListUI : MonoBehaviour
     public GameObject livreItemPrefab;     // Le prefab LivreItem
     public Transform contentParent;        // Le Content du ScrollView
     public BookDetailsUI bookDetailsUI;
+
+    private bool isLoading = false;
     private async void Start()
     {
         await AfficherTousLesLivres();
@@ -16,6 +18,17 @@ public class BookListUI : MonoBehaviour
 
     private async Task AfficherTousLesLivres()
     {
+        if (isLoading)
+        {
+            return;
+        }
+
+        isLoading = true;
+
+        foreach (Transform child in contentParent)
+        {
+            Destroy(child.gameObject);
+        }
         // 1. On récupère les livres depuis Supabase
         List<Book> livres = await BookService.GetAllBooks();
 
@@ -35,6 +48,7 @@ public class BookListUI : MonoBehaviour
             {
                 titreTexte.text = livre.Title;
             }
+            isLoading = false;
         }
     }
 
