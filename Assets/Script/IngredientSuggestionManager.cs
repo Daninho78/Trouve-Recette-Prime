@@ -6,6 +6,7 @@ using UnityEngine;
 public class IngredientSuggestionManager : MonoBehaviour
 {
     private List<Ingredient> allIngredients = new List<Ingredient>();
+    
 
     private async void Start()
     {
