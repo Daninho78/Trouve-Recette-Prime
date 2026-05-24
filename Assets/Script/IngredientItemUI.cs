@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IngredientItemUI : MonoBehaviour
 {
@@ -62,6 +63,29 @@ public class IngredientItemUI : MonoBehaviour
             {
                 text.text = ingredient.Name;
             }
+            Button button = buttonObject.GetComponent<Button>();
+            if (button != null)
+            {
+                Ingredient capturedIngredient = ingredient;
+                button.onClick.AddListener(() => SelectSuggestion(capturedIngredient));
+            }
+        }
+    }
+
+    private void SelectSuggestion(Ingredient ingredient)
+    {
+        IngredientInputData data = GetComponent<IngredientInputData>();
+
+        data.selectedIngredient = ingredient;
+        data.nameInput.text = ingredient.Name;
+
+        suggestionsPanel.gameObject.SetActive(false);
+
+        IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
+
+        if (manager != null)
+        {
+            manager.EnsureEmptyLineAtEnd();
         }
     }
 }

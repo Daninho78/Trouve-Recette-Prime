@@ -7,5 +7,5 @@ public class IngredientInputData : MonoBehaviour
     public TMP_Dropdown unitDropdown;
     public TMP_InputField nameInput;
     public TMP_InputField customQuantityInput;
-
+    public Ingredient selectedIngredient;
 }

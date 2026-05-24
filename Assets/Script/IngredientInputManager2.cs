@@ -116,4 +116,21 @@ public class IngredientInputManager2 : MonoBehaviour
         }
     }
 
+    public void EnsureEmptyLineAtEnd()
+    {
+        if (transform.childCount == 0)
+        {
+            CreateNewInput();
+            return;
+        }
+
+        Transform lastItem = transform.GetChild(transform.childCount - 1);
+        IngredientInputData data = lastItem.GetComponent<IngredientInputData>();
+
+        if (data != null && !string.IsNullOrWhiteSpace(data.nameInput.text))
+        {
+            CreateNewInput();
+        }
+    }
+
 }
