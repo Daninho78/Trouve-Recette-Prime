@@ -86,7 +86,7 @@ public class UIAjoutBasique : MonoBehaviour
         var ingredients = ingredientInputManager.GetAllIngredients();
         //verifie qu'il n'y a pas doublons dans la liste des ingredients
         var ingredientsNormalises = ingredients
-    .Select(i => i.name.Trim().ToLower())
+    .Select(i => i.ingredient.Name.Trim().ToLower())
     .ToList();
 
         bool hasDuplicate = ingredientsNormalises.Count != ingredientsNormalises.Distinct().Count();
@@ -106,7 +106,7 @@ public class UIAjoutBasique : MonoBehaviour
 
             foreach (var ingr in ingredientsEdit)
             {
-                Debug.Log($"EDIT INGREDIENT -> name: {ingr.name}, quantity: {ingr.quantity}, unit: {ingr.unit}, quantityText: {ingr.quantityText}");
+                Debug.Log($"EDIT INGREDIENT -> name: {ingr.ingredient.Name}, quantity: {ingr.quantity}, unit: {ingr.unit}, quantityText: {ingr.quantityText}");
             }
 
             bool success = await SupabaseRPC.UpdateRecipeRPC(
@@ -125,22 +125,17 @@ public class UIAjoutBasique : MonoBehaviour
 
             foreach (var ingr in ingredientsEdit)
             {
-                string nomNettoye = ingr.name.Trim().ToLower();
+                var ingredientId = ingr.ingredient.Id;
 
-                if (!string.IsNullOrEmpty(nomNettoye))
+                if (ingredientId != Guid.Empty)
                 {
-                    var ingredientId = await SupabaseRPC.InsertIngredientRPC(nomNettoye);
-
-                    if (ingredientId != Guid.Empty)
-                    {
-                        await SupabaseRPC.InsertRecipeIngredientRPC(
-                            currentRecipeId,
-                            ingredientId,
-                            ingr.quantity,
-                            ingr.unit,
-                            ingr.quantityText
-                        );
-                    }
+                    await SupabaseRPC.InsertRecipeIngredientRPC(
+                        currentRecipeId,
+                        ingredientId,
+                        ingr.quantity,
+                        ingr.unit,
+                        ingr.quantityText
+                    );
                 }
             }
 
@@ -205,28 +200,19 @@ public class UIAjoutBasique : MonoBehaviour
 
         foreach (var ingredient in ingredients)
         {
-            string nomNettoye = ingredient.name.Trim().ToLower();
+            var ingredientId = ingredient.ingredient.Id;
 
-            if (!string.IsNullOrEmpty(nomNettoye))
+            if (ingredientId != Guid.Empty)
             {
-                Debug.Log("⏳ Envoi RPC ingrédient : " + nomNettoye);
-                var ingredientId = await SupabaseRPC.InsertIngredientRPC(nomNettoye);
+                await SupabaseRPC.InsertRecipeIngredientRPC(
+                    recetteId,
+                    ingredientId,
+                    ingredient.quantity,
+                    ingredient.unit,
+                    ingredient.quantityText
+                );
 
-                if (ingredientId != Guid.Empty)
-                {
-                    await SupabaseRPC.InsertRecipeIngredientRPC(
-                        recetteId,
-                        ingredientId,
-                        ingredient.quantity,
-                        ingredient.unit,
-                        ingredient.quantityText
-                        );
-                    Debug.Log("🔗 Ingrédient lié : " + nomNettoye);
-                }
-                else
-                {
-                    Debug.LogWarning("❌ Erreur lors de l'insertion de l'ingrédient : " + nomNettoye);
-                }
+                Debug.Log("🔗 Ingrédient lié : " + ingredient.ingredient.Name);
             }
         }
 
@@ -324,6 +310,12 @@ public class UIAjoutBasique : MonoBehaviour
         {
             var ingr = ingredients[0];
 
+            
+            firstItem.selectedIngredient = new Ingredient
+            {
+                Id = ingr.IngredientId,
+                Name = ingr.Name
+            };
             firstItem.nameInput.text = ingr.Name;
             firstItem.quantityInput.text = ingr.Quantity.ToString();
 
@@ -350,6 +342,12 @@ public class UIAjoutBasique : MonoBehaviour
             GameObject newItem = ingredientInputManager.CreateNewInput();
             var data = newItem.GetComponent<IngredientInputData>();
 
+            
+            data.selectedIngredient = new Ingredient
+            {
+                Id = ingr.IngredientId,
+                Name = ingr.Name
+            };
             data.nameInput.text = ingr.Name;
             data.quantityInput.text = ingr.Quantity.ToString();
 

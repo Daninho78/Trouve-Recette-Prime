@@ -40,19 +40,19 @@ public class IngredientInputManager2 : MonoBehaviour
     }
 
    
-     public List<(string name, int quantity, string unit, string quantityText)> GetAllIngredients()
+     public List<(Ingredient ingredient, int quantity, string unit, string quantityText)> GetAllIngredients()
         {
-            List<(string, int, string, string)> ingredients = new();
+            List<(Ingredient, int, string, string)> ingredients = new();
 
             foreach (Transform child in transform)
             {
                 var data = child.GetComponent<IngredientInputData>();
                 if (data == null) continue;
 
-                string name = data.nameInput.text;
+                Ingredient selectedIngredient = data.selectedIngredient;
 
-                if (string.IsNullOrWhiteSpace(name))
-                    continue;
+                if (selectedIngredient == null)
+                continue;
 
                 string selectedUnit = data.unitDropdown.options[data.unitDropdown.value].text;
 
@@ -60,14 +60,14 @@ public class IngredientInputManager2 : MonoBehaviour
                 {
                     string quantityText = data.customQuantityInput.text;
 
-                    ingredients.Add((name, 0, null, quantityText));
-                }
+                    ingredients.Add((selectedIngredient, 0, null, quantityText));
+            }
                 else
                 {
                     int.TryParse(data.quantityInput.text, out int quantity);
 
-                    ingredients.Add((name, quantity, selectedUnit, null));
-                }
+                    ingredients.Add((selectedIngredient, quantity, selectedUnit, null));
+            }
             }
 
             return ingredients;

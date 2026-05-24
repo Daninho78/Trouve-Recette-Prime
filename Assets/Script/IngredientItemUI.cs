@@ -24,7 +24,21 @@ public class IngredientItemUI : MonoBehaviour
     //affiche la suggestion d'ingredients
     public void OnIngredientInputChanged(string value)
     {
+
         Debug.Log("Input ingrédient changé : " + value);
+
+        IngredientInputData data = GetComponent<IngredientInputData>();
+
+        if (data != null && data.selectedIngredient != null && value == data.selectedIngredient.Name)
+        {
+            foreach (Transform child in suggestionsPanel)
+            {
+                Destroy(child.gameObject);
+            }
+
+            suggestionsPanel.gameObject.SetActive(false);
+            return;
+        }
         foreach (Transform child in suggestionsPanel)
         {
             Destroy(child.gameObject);
