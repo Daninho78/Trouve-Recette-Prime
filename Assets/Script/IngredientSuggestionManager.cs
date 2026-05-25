@@ -28,9 +28,11 @@ public class IngredientSuggestionManager : MonoBehaviour
         string search = searchText.ToLower().Trim();
 
         List<Ingredient> results = allIngredients
-            .Where(i => i.Name.ToLower().Contains(search))
-            .Take(10)
-            .ToList();
+        .Where(i => i.Name.ToLower().Contains(search))
+        .OrderBy(i => i.Name.ToLower().StartsWith(search) ? 0 : 1)
+        .ThenBy(i => i.Name)
+        .Take(10)
+        .ToList();
 
         return results;
     }
