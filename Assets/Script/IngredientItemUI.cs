@@ -10,6 +10,8 @@ public class IngredientItemUI : MonoBehaviour
     public GameObject suggestionButtonPrefab;
     public Transform suggestionsPanel;
 
+    private Ingredient firstSuggestion;
+
     public void OnUnitChanged()
     {
         string selected = unitDropdown.options[unitDropdown.value].text;
@@ -59,6 +61,7 @@ public class IngredientItemUI : MonoBehaviour
         }
 
         var suggestions = manager.GetSuggestions(value);
+        firstSuggestion = suggestions.Count > 0 ? suggestions[0] : null;
 
         if (suggestions.Count == 0)
         {
@@ -102,4 +105,15 @@ public class IngredientItemUI : MonoBehaviour
             manager.EnsureEmptyLineAtEnd();
         }
     }
+
+    public void OnIngredientEndEdit(string value)
+    {
+        Debug.Log("End edit ingrédient : " + value);
+        if (firstSuggestion != null)
+        {
+            SelectSuggestion(firstSuggestion);
+        }
+    }
+
+   
 }
