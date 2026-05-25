@@ -16,7 +16,7 @@ public class IngredientInputManager2 : MonoBehaviour
         data.nameInput.text = "";
         data.customQuantityInput.text = "";
         data.customQuantityInput.gameObject.SetActive(false);
-        data.unitDropdown.value = 0;
+        data.unitInput.text = "";
         return newInput;
     }
 
@@ -54,9 +54,11 @@ public class IngredientInputManager2 : MonoBehaviour
                 if (selectedIngredient == null)
                 continue;
 
-                string selectedUnit = data.unitDropdown.options[data.unitDropdown.value].text;
+            string selectedUnit = data.unitInput.text.Trim();
+            if (string.IsNullOrWhiteSpace(selectedUnit))
+                selectedUnit = null;
 
-                if (selectedUnit == "Autre")
+            if (selectedUnit == "Autre")
                 {
                     string quantityText = data.customQuantityInput.text;
 
@@ -130,6 +132,25 @@ public class IngredientInputManager2 : MonoBehaviour
         if (data != null && !string.IsNullOrWhiteSpace(data.nameInput.text))
         {
             CreateNewInput();
+        }
+    }
+
+    public void OnUnitEndEdit(string value)
+    {
+        IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
+
+        if (manager != null)
+        {
+            manager.EnsureEmptyLineAtEnd();
+
+            Transform lastItem = manager.transform.GetChild(manager.transform.childCount - 1);
+            IngredientInputData lastData = lastItem.GetComponent<IngredientInputData>();
+
+            if (lastData != null && lastData.nameInput != null)
+            {
+                lastData.nameInput.Select();
+                lastData.nameInput.ActivateInputField();
+            }
         }
     }
 
