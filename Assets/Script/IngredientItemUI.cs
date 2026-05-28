@@ -10,7 +10,12 @@ public class IngredientItemUI : MonoBehaviour
     public GameObject suggestionButtonPrefab;
     public Transform suggestionsPanel;
 
+    public GameObject suggestionRow;
+
     private Ingredient firstSuggestion;
+    private Unit firstUnitSuggestion;
+
+    public Transform unitSuggestionsPanel;
 
     public void OnUnitChanged()
     {
@@ -38,6 +43,7 @@ public class IngredientItemUI : MonoBehaviour
                 Destroy(child.gameObject);
             }
 
+            suggestionRow.SetActive(false);
             suggestionsPanel.gameObject.SetActive(false);
             return;
         }
@@ -48,6 +54,7 @@ public class IngredientItemUI : MonoBehaviour
 
         if (string.IsNullOrWhiteSpace(value))
         {
+            suggestionRow.SetActive(false);
             suggestionsPanel.gameObject.SetActive(false);
             return;
         }
@@ -65,10 +72,12 @@ public class IngredientItemUI : MonoBehaviour
 
         if (suggestions.Count == 0)
         {
+            suggestionRow.SetActive(false);
             suggestionsPanel.gameObject.SetActive(false);
             return;
         }
 
+        suggestionRow.SetActive(true);
         suggestionsPanel.gameObject.SetActive(true);
 
         foreach (var ingredient in suggestions)
@@ -96,6 +105,7 @@ public class IngredientItemUI : MonoBehaviour
         data.selectedIngredient = ingredient;
         data.nameInput.text = ingredient.Name;
 
+        suggestionRow.SetActive(false);
         suggestionsPanel.gameObject.SetActive(false);
 
         if (data.quantityInput != null)
@@ -136,6 +146,11 @@ public class IngredientItemUI : MonoBehaviour
 
     public void OnUnitEndEdit(string value)
     {
+        if (firstUnitSuggestion != null)
+        {
+            SelectUnitSuggestion(firstUnitSuggestion);
+        }
+
         IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
 
         if (manager != null)
@@ -151,5 +166,81 @@ public class IngredientItemUI : MonoBehaviour
                 lastData.nameInput.ActivateInputField();
             }
         }
+    }
+
+    public void OnUnitInputChanged(string value)
+    {
+        foreach (Transform child in unitSuggestionsPanel)
+        {
+            Destroy(child.gameObject);
+        }
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            unitSuggestionsPanel.gameObject.SetActive(false);
+            CheckSuggestionRowVisibility();
+            return;
+        }
+
+        var manager = FindObjectOfType<UnitSuggestionManager>();
+
+        if (manager == null)
+        {
+            Debug.LogWarning("UnitSuggestionManager introuvable.");
+            return;
+        }
+
+        var suggestions = manager.GetSuggestions(value);
+        firstUnitSuggestion = suggestions.Count > 0 ? suggestions[0] : null;
+
+        if (suggestions.Count == 0)
+        {
+            unitSuggestionsPanel.gameObject.SetActive(false);
+            CheckSuggestionRowVisibility();
+            return;
+        }
+
+        suggestionRow.SetActive(true);
+        unitSuggestionsPanel.gameObject.SetActive(true);
+
+        foreach (var unit in suggestions)
+        {
+            GameObject buttonObject = Instantiate(suggestionButtonPrefab, unitSuggestionsPanel);
+
+            TextMeshProUGUI text = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
+            if (text != null)
+            {
+                text.text = unit.Name;
+            }
+
+            Button button = buttonObject.GetComponent<Button>();
+            if (button != null)
+            {
+                Unit capturedUnit = unit;
+                button.onClick.AddListener(() => SelectUnitSuggestion(capturedUnit));
+            }
+        }
+    }
+
+    private void CheckSuggestionRowVisibility()
+    {
+        bool ingredientPanelActive = suggestionsPanel.gameObject.activeSelf;
+        bool unitPanelActive = unitSuggestionsPanel.gameObject.activeSelf;
+
+        suggestionRow.SetActive(ingredientPanelActive || unitPanelActive);
+    }
+
+    private void SelectUnitSuggestion(Unit unit)
+    {
+        IngredientInputData data = GetComponent<IngredientInputData>();
+
+        if (data == null || data.unitInput == null)
+            return;
+
+        data.unitInput.text = unit.Name;
+
+
+        unitSuggestionsPanel.gameObject.SetActive(false);
+        CheckSuggestionRowVisibility();
     }
 }

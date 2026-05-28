@@ -14,8 +14,7 @@ public class IngredientInputManager2 : MonoBehaviour
 
         data.quantityInput.text = "";
         data.nameInput.text = "";
-        data.customQuantityInput.text = "";
-        data.customQuantityInput.gameObject.SetActive(false);
+        
         data.unitInput.text = "";
         return newInput;
     }
