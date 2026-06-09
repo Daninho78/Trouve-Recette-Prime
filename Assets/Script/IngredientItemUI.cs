@@ -17,8 +17,13 @@ public class IngredientItemUI : MonoBehaviour
 
     public Transform unitSuggestionsPanel;
 
+    public bool suppressSuggestions = false;
+
     public void OnUnitChanged()
     {
+        if (suppressSuggestions)
+            return;
+
         string selected = unitDropdown.options[unitDropdown.value].text;
         customQuantityInput.SetActive(selected == "Autre");
     }
@@ -31,6 +36,8 @@ public class IngredientItemUI : MonoBehaviour
     //affiche la suggestion d'ingredients
     public void OnIngredientInputChanged(string value)
     {
+        if (suppressSuggestions)
+            return;
 
         Debug.Log("Input ingrédient changé : " + value);
 
@@ -114,12 +121,12 @@ public class IngredientItemUI : MonoBehaviour
             data.quantityInput.ActivateInputField();
         }
 
-        IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
+        /*IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
 
         if (manager != null)
         {
             manager.EnsureEmptyLineAtEnd();
-        }
+        }*/
 
 
     }
@@ -151,7 +158,7 @@ public class IngredientItemUI : MonoBehaviour
             SelectUnitSuggestion(firstUnitSuggestion);
         }
 
-        IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
+        /*IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
 
         if (manager != null)
         {
@@ -165,7 +172,7 @@ public class IngredientItemUI : MonoBehaviour
                 lastData.nameInput.Select();
                 lastData.nameInput.ActivateInputField();
             }
-        }
+        }*/
     }
 
     public void OnUnitInputChanged(string value)
@@ -240,6 +247,30 @@ public class IngredientItemUI : MonoBehaviour
         data.unitInput.text = unit.Name;
 
 
+        unitSuggestionsPanel.gameObject.SetActive(false);
+        CheckSuggestionRowVisibility();
+    }
+
+    public void ScrollThisItemToTop()
+    {
+        Debug.Log("Scroll demandé pour : " + gameObject.name);
+
+        ScrollToIngredientItem scrollHelper = FindObjectOfType<ScrollToIngredientItem>();
+
+        if (scrollHelper == null)
+            return;
+
+        RectTransform itemRect = GetComponent<RectTransform>();
+
+        scrollHelper.ScrollToBottom();
+    }
+
+    public void ClearSuggestionState()
+    {
+        firstSuggestion = null;
+        firstUnitSuggestion = null;
+
+        suggestionsPanel.gameObject.SetActive(false);
         unitSuggestionsPanel.gameObject.SetActive(false);
         CheckSuggestionRowVisibility();
     }

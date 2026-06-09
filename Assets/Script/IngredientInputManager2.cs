@@ -134,13 +134,13 @@ public class IngredientInputManager2 : MonoBehaviour
         }
     }
 
-    public void OnUnitEndEdit(string value)
+    /*public void OnUnitEndEdit(string value)
     {
         IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
 
         if (manager != null)
         {
-            manager.EnsureEmptyLineAtEnd();
+            //manager.EnsureEmptyLineAtEnd();
 
             Transform lastItem = manager.transform.GetChild(manager.transform.childCount - 1);
             IngredientInputData lastData = lastItem.GetComponent<IngredientInputData>();
@@ -151,6 +151,28 @@ public class IngredientInputManager2 : MonoBehaviour
                 lastData.nameInput.ActivateInputField();
             }
         }
+    }*/
+
+    public GameObject CreateInputFromData(Ingredient ingredient, string quantity, string unit)
+    {
+        GameObject newInput = CreateNewInput();
+
+        IngredientInputData data = newInput.GetComponent<IngredientInputData>();
+        IngredientItemUI ui = newInput.GetComponent<IngredientItemUI>();
+
+        if (ui != null)
+            ui.suppressSuggestions = true;
+
+        data.selectedIngredient = ingredient;
+        data.nameInput.text = ingredient.Name;
+        data.quantityInput.text = quantity;
+        data.unitInput.text = unit;
+
+        if (ui != null)
+            ui.suppressSuggestions = false;
+        ui.ClearSuggestionState();
+
+        return newInput;
     }
 
 }
