@@ -13,6 +13,7 @@ public class UINavigation : MonoBehaviour
     public GameObject panelAddRecipe;
     public GameObject panelSearch;
     public GameObject panelFilter;
+    public GameObject panelAddIngredients;
    
 
     void CloseAllPanels()
@@ -26,6 +27,7 @@ public class UINavigation : MonoBehaviour
         panelAddRecipe.SetActive(false);
         panelSearch.SetActive(false);
         panelFilter.SetActive(false);
+        panelAddIngredients.SetActive(false);
         
     }
 
@@ -64,6 +66,14 @@ public class UINavigation : MonoBehaviour
         panelFilter .SetActive(!panelFilter.activeSelf);
     }
 
+    public void openAddIngredients()
+    {
+        panelAddIngredients .SetActive(true);
+    }
 
+    public void closeAddIngredients()
+    {
+        panelAddIngredients.SetActive(false);
+    }
     
 }

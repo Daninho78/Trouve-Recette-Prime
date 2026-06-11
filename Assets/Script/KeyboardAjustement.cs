@@ -17,20 +17,7 @@ public class KeyboardAdjuster : MonoBehaviour
     {
         DebugMeasureIngredientDistance();
     }
-    void Update()
-    {
-        
-
-        if (TouchScreenKeyboard.visible || forceKeyboardForEditor)
-        {
-            keyboardSpacer.preferredHeight = keyboardSpaceHeight;
-        }
-        else
-        {
-            keyboardSpacer.preferredHeight = 0f;
-        }
-
-    }
+   
 
     public void DebugMeasureIngredientDistance()
     {
