@@ -9,4 +9,10 @@ public class IngredientInputData : MonoBehaviour
     public TMP_InputField nameInput;
     public TMP_InputField customQuantityInput;
     public Ingredient selectedIngredient;
+    
+
+    public void DeleteIngredient()
+    {
+        Destroy(gameObject);
+    }
 }

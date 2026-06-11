@@ -164,15 +164,25 @@ public class IngredientInputManager2 : MonoBehaviour
             ui.suppressSuggestions = true;
 
         data.selectedIngredient = ingredient;
-        data.nameInput.text = ingredient.Name;
-        data.quantityInput.text = quantity;
-        data.unitInput.text = unit;
+
+        data.nameInput.SetTextWithoutNotify(ingredient.Name);
+        data.quantityInput.SetTextWithoutNotify(quantity);
+        data.unitInput.SetTextWithoutNotify(unit);
+
 
         if (ui != null)
             ui.suppressSuggestions = false;
         ui.ClearSuggestionState();
 
         return newInput;
+    }
+
+    public void ClearAllInputs()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
     }
 
 }

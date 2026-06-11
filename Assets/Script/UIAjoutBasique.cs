@@ -302,70 +302,25 @@ public class UIAjoutBasique : MonoBehaviour
         var ingredients = await RecipeService.GetIngredientsByRecipe(recipe.Id);
         Debug.Log("Nombre d'ingrédients récupérés : " + ingredients.Count);
 
-        ingredientInputManager.ClearInputs();
+        ingredientInputManager.ClearAllInputs();
 
-        var firstItem = ingredientInputManager.transform.GetChild(0).GetComponent<IngredientInputData>();
-
-        if (ingredients.Count > 0)
+        foreach (var ingr in ingredients)
         {
-            var ingr = ingredients[0];
+            Debug.Log("QUANTITE CHARGEE : " + ingr.Name + " = " + ingr.Quantity);
+            ingredientInputManager.CreateInputFromData(
+                new Ingredient
+                {
+                    Id = ingr.IngredientId,
+                    Name = ingr.Name
+                },
+                ingr.Quantity.HasValue ? ingr.Quantity.Value.ToString() : "",
+                ingr.Unity
 
-            
-            firstItem.selectedIngredient = new Ingredient
-            {
-                Id = ingr.IngredientId,
-                Name = ingr.Name
-            };
-            firstItem.nameInput.text = ingr.Name;
-            firstItem.quantityInput.text = ingr.Quantity.ToString();
 
-            
-            if (!string.IsNullOrWhiteSpace(ingr.Unity))
-            {
-                int unitIndex = firstItem.unitDropdown.options.FindIndex(o => o.text == ingr.Unity);
-                if (unitIndex >= 0)
-                    firstItem.unitDropdown.value = unitIndex;
-            }
-
-            if (!string.IsNullOrWhiteSpace(ingr.QuantityText))
-            {
-                firstItem.customQuantityInput.gameObject.SetActive(true);
-                firstItem.customQuantityInput.text = ingr.QuantityText;
-            }
+            );
         }
 
 
-
-        for (int i = 1; i < ingredients.Count; i++)
-        {
-            var ingr = ingredients[i];
-            GameObject newItem = ingredientInputManager.CreateNewInput();
-            var data = newItem.GetComponent<IngredientInputData>();
-
-            
-            data.selectedIngredient = new Ingredient
-            {
-                Id = ingr.IngredientId,
-                Name = ingr.Name
-            };
-            data.nameInput.text = ingr.Name;
-            data.quantityInput.text = ingr.Quantity.ToString();
-
-            if (!string.IsNullOrWhiteSpace(ingr.Unity))
-            {
-                int unitIndex = data.unitDropdown.options.FindIndex(o => o.text == ingr.Unity);
-                if (unitIndex >= 0)
-                    data.unitDropdown.value = unitIndex;
-            }
-
-            if (!string.IsNullOrWhiteSpace(ingr.QuantityText))
-            {
-                data.customQuantityInput.gameObject.SetActive(true);
-                data.customQuantityInput.text = ingr.QuantityText;
-            }
-        }
-
-        ingredientInputManager.CreateNewInput();
     }
 
 
