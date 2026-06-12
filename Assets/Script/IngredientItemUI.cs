@@ -1,10 +1,10 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class IngredientItemUI : MonoBehaviour
 {
-    public TMP_Dropdown unitDropdown;
     public GameObject customQuantityInput;
 
     public GameObject suggestionButtonPrefab;
@@ -19,14 +19,25 @@ public class IngredientItemUI : MonoBehaviour
 
     public bool suppressSuggestions = false;
 
-    public void OnUnitChanged()
+   
+
+
+    private void Update()
     {
-        if (suppressSuggestions)
+        IngredientInputData data = GetComponent<IngredientInputData>();
+
+        if (data == null || data.nameInput == null)
             return;
 
-        string selected = unitDropdown.options[unitDropdown.value].text;
-        customQuantityInput.SetActive(selected == "Autre");
+        if (data.nameInput.isFocused && Input.GetKeyDown(KeyCode.Return))
+        {
+            if (firstSuggestion != null)
+            {
+                SelectSuggestion(firstSuggestion);
+            }
+        }
     }
+
 
     public void RemoveItem()
     {
@@ -100,7 +111,11 @@ public class IngredientItemUI : MonoBehaviour
             if (button != null)
             {
                 Ingredient capturedIngredient = ingredient;
-                button.onClick.AddListener(() => SelectSuggestion(capturedIngredient));
+                button.onClick.AddListener(() =>
+                {
+                 
+                    SelectSuggestion(capturedIngredient);
+                });
             }
         }
     }
@@ -128,11 +143,8 @@ public class IngredientItemUI : MonoBehaviour
     public void OnIngredientEndEdit(string value)
     {
         Debug.Log("End edit ingrédient : " + value);
-        if (firstSuggestion != null)
-        {
-            SelectSuggestion(firstSuggestion);
-        }
     }
+
 
     public void OnQuantityEndEdit(string value)
     {
@@ -253,5 +265,29 @@ public class IngredientItemUI : MonoBehaviour
         suggestionsPanel.gameObject.SetActive(false);
         unitSuggestionsPanel.gameObject.SetActive(false);
         CheckSuggestionRowVisibility();
+    }
+
+    public void ValidateIngredientWithEnter()
+    {
+        if (firstSuggestion != null)
+        {
+            SelectSuggestion(firstSuggestion);
+        }
+    }
+
+    public void ValidateUnitWithEnter()
+    {
+        if (firstUnitSuggestion != null)
+        {
+            SelectUnitSuggestion(firstUnitSuggestion);
+        }
+    }
+
+    public void ValidateIngredientFirstSuggestion()
+    {
+        if (firstSuggestion != null)
+        {
+            SelectSuggestion(firstSuggestion);
+        }
     }
 }
