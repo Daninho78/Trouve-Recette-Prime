@@ -19,24 +19,7 @@ public class IngredientInputManager2 : MonoBehaviour
         return newInput;
     }
 
-    public void OnInputEndEdit(TMP_InputField currentInput)
-    {
-        if (string.IsNullOrWhiteSpace(currentInput.text))
-            return;
-
-        Transform ingredientItem = currentInput.transform.parent.parent;
-
-        if (ingredientItem.GetSiblingIndex() != transform.childCount - 1)
-            return;
-
-        // On crée une nouvelle ligne vide en dessous
-        CreateNewInput();
-
-        // Mais on garde le focus sur la quantité de la ligne actuelle
-        var currentData = ingredientItem.GetComponent<IngredientInputData>();
-        currentData.quantityInput.Select();
-        currentData.quantityInput.ActivateInputField();
-    }
+    
 
    
      public List<(Ingredient ingredient, int quantity, string unit, string quantityText)> GetAllIngredients()
@@ -117,41 +100,6 @@ public class IngredientInputManager2 : MonoBehaviour
         }
     }
 
-    public void EnsureEmptyLineAtEnd()
-    {
-        if (transform.childCount == 0)
-        {
-            CreateNewInput();
-            return;
-        }
-
-        Transform lastItem = transform.GetChild(transform.childCount - 1);
-        IngredientInputData data = lastItem.GetComponent<IngredientInputData>();
-
-        if (data != null && !string.IsNullOrWhiteSpace(data.nameInput.text))
-        {
-            CreateNewInput();
-        }
-    }
-
-    /*public void OnUnitEndEdit(string value)
-    {
-        IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
-
-        if (manager != null)
-        {
-            //manager.EnsureEmptyLineAtEnd();
-
-            Transform lastItem = manager.transform.GetChild(manager.transform.childCount - 1);
-            IngredientInputData lastData = lastItem.GetComponent<IngredientInputData>();
-
-            if (lastData != null && lastData.nameInput != null)
-            {
-                lastData.nameInput.Select();
-                lastData.nameInput.ActivateInputField();
-            }
-        }
-    }*/
 
     public GameObject CreateInputFromData(Ingredient ingredient, string quantity, string unit)
     {

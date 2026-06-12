@@ -37,7 +37,7 @@ public class AddIngredientsPanelUI : MonoBehaviour
         inputLine.nameInput.Select();
         inputLine.nameInput.ActivateInputField();
 
-        //RefreshIngredientList();
+        
     }
 
 

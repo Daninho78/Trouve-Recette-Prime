@@ -121,13 +121,7 @@ public class IngredientItemUI : MonoBehaviour
             data.quantityInput.ActivateInputField();
         }
 
-        /*IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
-
-        if (manager != null)
-        {
-            manager.EnsureEmptyLineAtEnd();
-        }*/
-
+        
 
     }
 
@@ -158,21 +152,7 @@ public class IngredientItemUI : MonoBehaviour
             SelectUnitSuggestion(firstUnitSuggestion);
         }
 
-        /*IngredientInputManager2 manager = GetComponentInParent<IngredientInputManager2>();
-
-        if (manager != null)
-        {
-            manager.EnsureEmptyLineAtEnd();
-
-            Transform lastItem = manager.transform.GetChild(manager.transform.childCount - 1);
-            IngredientInputData lastData = lastItem.GetComponent<IngredientInputData>();
-
-            if (lastData != null && lastData.nameInput != null)
-            {
-                lastData.nameInput.Select();
-                lastData.nameInput.ActivateInputField();
-            }
-        }*/
+        
     }
 
     public void OnUnitInputChanged(string value)
