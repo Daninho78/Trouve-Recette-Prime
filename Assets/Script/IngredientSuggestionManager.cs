@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.Globalization;
+using System.Text;
 
 public class IngredientSuggestionManager : MonoBehaviour
 {
@@ -55,7 +57,7 @@ public class IngredientSuggestionManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(text))
             return "";
 
-        string normalized = text.ToLower().Trim();
+        string normalized = RemoveDiacritics(text.ToLower().Trim());
 
         normalized = normalized
             .Replace("'", " ")
@@ -78,5 +80,22 @@ public class IngredientSuggestionManager : MonoBehaviour
         return normalized.Trim();
     }
 
+    private string RemoveDiacritics(string text)
+    {
+        string normalized = text.Normalize(NormalizationForm.FormD);
+        StringBuilder builder = new StringBuilder();
+
+        foreach (char c in normalized)
+        {
+            UnicodeCategory category = CharUnicodeInfo.GetUnicodeCategory(c);
+
+            if (category != UnicodeCategory.NonSpacingMark)
+            {
+                builder.Append(c);
+            }
+        }
+
+        return builder.ToString().Normalize(NormalizationForm.FormC);
+    }
 
 }
