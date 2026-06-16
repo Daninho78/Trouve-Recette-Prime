@@ -12,6 +12,7 @@ public class SubmitInputFieldScript : MonoBehaviour
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private IngredientItemUI ingredientItemUI;
     [SerializeField] private SubmitType submitType;
+    [SerializeField] private AddIngredientsPanelUI addIngredientsPanelUI;
 
     private void Awake()
     {
@@ -20,6 +21,9 @@ public class SubmitInputFieldScript : MonoBehaviour
 
         if (ingredientItemUI == null)
             ingredientItemUI = GetComponentInParent<IngredientItemUI>();
+
+        if (addIngredientsPanelUI == null)
+            addIngredientsPanelUI = GetComponentInParent<AddIngredientsPanelUI>();
     }
 
     private void OnEnable()
@@ -48,6 +52,11 @@ public class SubmitInputFieldScript : MonoBehaviour
         else if (submitType == SubmitType.Unit)
         {
             ingredientItemUI.ValidateUnitFirstSuggestion();
+
+            if (addIngredientsPanelUI != null)
+            {
+                addIngredientsPanelUI.AddIngredientToList();
+            }
         }
     }
 }
