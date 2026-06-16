@@ -159,12 +159,7 @@ public class IngredientItemUI : MonoBehaviour
 
     public void OnUnitEndEdit(string value)
     {
-        if (firstUnitSuggestion != null)
-        {
-            SelectUnitSuggestion(firstUnitSuggestion);
-        }
-
-        
+        Debug.Log("End edit unité : " + value);
     }
 
     public void OnUnitInputChanged(string value)
@@ -288,6 +283,14 @@ public class IngredientItemUI : MonoBehaviour
         if (firstSuggestion != null)
         {
             SelectSuggestion(firstSuggestion);
+        }
+    }
+
+    public void ValidateUnitFirstSuggestion()
+    {
+        if (firstUnitSuggestion != null)
+        {
+            SelectUnitSuggestion(firstUnitSuggestion);
         }
     }
 }

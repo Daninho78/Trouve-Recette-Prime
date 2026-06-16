@@ -3,8 +3,15 @@ using UnityEngine;
 
 public class SubmitInputFieldScript : MonoBehaviour
 {
+    public enum SubmitType
+    {
+        Ingredient,
+        Unit
+    }
+
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private IngredientItemUI ingredientItemUI;
+    [SerializeField] private SubmitType submitType;
 
     private void Awake()
     {
@@ -31,9 +38,16 @@ public class SubmitInputFieldScript : MonoBehaviour
     {
         Debug.Log("SUBMIT INPUT : " + text);
 
-        if (ingredientItemUI != null)
+        if (ingredientItemUI == null)
+            return;
+
+        if (submitType == SubmitType.Ingredient)
         {
             ingredientItemUI.ValidateIngredientFirstSuggestion();
+        }
+        else if (submitType == SubmitType.Unit)
+        {
+            ingredientItemUI.ValidateUnitFirstSuggestion();
         }
     }
 }

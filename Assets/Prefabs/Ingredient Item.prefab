@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6727901526470238275}
   - component: {fileID: 3352653202948383989}
   - component: {fileID: 2294395148883492026}
+  - component: {fileID: 5400886289123855125}
   m_Layer: 5
   m_Name: Unity Input
   m_TagString: Untagged
@@ -220,6 +221,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &5400886289123855125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407336389976223796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 722a8025c4b34b64da7e004d794f0cf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 3352653202948383989}
+  ingredientItemUI: {fileID: 3993648020982081390}
+  submitType: 1
 --- !u!1 &1304757881219036388
 GameObject:
   m_ObjectHideFlags: 0
@@ -2806,3 +2822,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputField: {fileID: 2494363554745605407}
   ingredientItemUI: {fileID: 3993648020982081390}
+  submitType: 0
