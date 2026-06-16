@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -16,7 +16,7 @@ public class IngredientSuggestionManager : MonoBehaviour
     private async Task LoadIngredients()
     {
         allIngredients = await IngredientService.GetAllIngredients();
-        Debug.Log("Suggestions ingr�dients pr�tes : " + allIngredients.Count);
+        Debug.Log("Suggestions ingrédients prêtes : " + allIngredients.Count);
 
     }
 
@@ -25,16 +25,57 @@ public class IngredientSuggestionManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(searchText))
             return new List<Ingredient>();
 
-        string search = searchText.ToLower().Trim();
+        string search = NormalizeSearchText(searchText);
+
+        string[] searchWords = search
+            .Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
 
         List<Ingredient> results = allIngredients
-        .Where(i => i.Name.ToLower().Contains(search))
-        .OrderBy(i => i.Name.ToLower().StartsWith(search) ? 0 : 1)
-        .ThenBy(i => i.Name)
-        .Take(10)
-        .ToList();
+            .Where(i =>
+            {
+                string ingredientName = NormalizeSearchText(i.Name);
+
+                return searchWords.All(word => ingredientName.Contains(word));
+            })
+            .OrderBy(i =>
+            {
+                string ingredientName = NormalizeSearchText(i.Name);
+
+                return ingredientName.StartsWith(search) ? 0 : 1;
+            })
+            .ThenBy(i => i.Name)
+            .Take(10)
+            .ToList();
 
         return results;
+    }
+
+    private string NormalizeSearchText(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return "";
+
+        string normalized = text.ToLower().Trim();
+
+        normalized = normalized
+            .Replace("'", " ")
+            .Replace("’", " ")
+            .Replace("`", " ")
+            .Replace("´", " ")
+            .Replace("ʼ", " ")
+            .Replace("-", " ")
+            .Replace(",", " ")
+            .Replace(".", " ")
+            .Replace(";", " ")
+            .Replace(":", " ")
+            .Replace("/", " ");
+
+        while (normalized.Contains("  "))
+        {
+            normalized = normalized.Replace("  ", " ");
+        }
+
+        return normalized.Trim();
     }
 
 
