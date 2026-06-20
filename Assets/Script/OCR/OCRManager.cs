@@ -5,13 +5,19 @@ public class OCRManager : MonoBehaviour
 {
     private IOCRService ocrService;
 
+    public static OCRManager Instance;
+
+    private Action<string> currentCallback;
+
     private void Awake()
     {
+        Instance = this;
+
 #if UNITY_IOS && !UNITY_EDITOR
     ocrService = new AppleVisionOCRService();
-    Debug.Log("OCRManager : service Apple Vision sélectionné.");
+    Debug.Log("OCRManager : service Apple Vision sï¿½lectionnï¿½.");
 #elif UNITY_ANDROID && !UNITY_EDITOR
-    Debug.Log("OCRManager : Android pas encore implémenté.");
+    Debug.Log("OCRManager : Android pas encore implï¿½mentï¿½.");
 #else
         ocrService = new AppleVisionOCRService();
         Debug.Log("OCRManager : mode Editor / test.");
@@ -20,8 +26,17 @@ public class OCRManager : MonoBehaviour
 
     public void RecognizeTextFromImage(string imagePath, Action<string> onTextRecognized)
     {
-        Debug.Log("Demande OCR reçue pour : " + imagePath);
+        currentCallback = onTextRecognized;
+
+        Debug.Log("Demande OCR reï¿½ue pour : " + imagePath);
 
         ocrService.RecognizeTextFromImage(imagePath, onTextRecognized);
     }
+
+    public void OnOCRTextRecognized(string recognizedText)
+{
+    Debug.Log("Texte OCR reÃ§u depuis iOS : " + recognizedText);
+
+    currentCallback?.Invoke(recognizedText);
+}
 }
