@@ -10,7 +10,18 @@ public class OCRTestController : MonoBehaviour
     {
         resultText.text = "Demande OCR en cours...";
 
-        ocrManager.RecognizeTextFromImage("test_image_path", OnTextRecognized);
+        NativeGallery.GetImageFromGallery((path) =>
+{
+    if (path == null)
+    {
+        resultText.text = "Aucune image sélectionnée.";
+        return;
+    }
+
+    resultText.text = "Image sélectionnée. OCR en cours...";
+    ocrManager.RecognizeTextFromImage(path, OnTextRecognized);
+
+}, "Choisir une image pour l'OCR", "image/*");
     }
 
     private void OnTextRecognized(string recognizedText)
