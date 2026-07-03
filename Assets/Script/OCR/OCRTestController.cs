@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System.Text;
 
 public class OCRTestController : MonoBehaviour
 {
@@ -26,6 +27,24 @@ public class OCRTestController : MonoBehaviour
 
     private void OnTextRecognized(string recognizedText)
     {
-        resultText.text = recognizedText;
+        RecipeOCRResult result = RecipeOCRParser.Parse(recognizedText);
+
+        StringBuilder ingredientsBuilder = new StringBuilder();
+
+foreach (string ingredient in result.ingredients)
+{
+    ingredientsBuilder.AppendLine("- " + ingredient);
+}
+
+resultText.text =
+    "Titre détecté : " + result.title +
+    "\nPortions : " + result.portions +
+    "\nPréparation : " + result.preparationTime +
+    "\nCuisson : " + result.cookingTime +
+    "\nIngrédients détectés : " + result.ingredientCount +
+    "\n\nListe des ingrédients :\n" +
+    ingredientsBuilder.ToString() +
+    "\n\n--- TEXTE OCR ---\n\n" +
+    recognizedText;
     }
 }
