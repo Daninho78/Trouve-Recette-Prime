@@ -31,20 +31,34 @@ public class OCRTestController : MonoBehaviour
 
         StringBuilder ingredientsBuilder = new StringBuilder();
 
-foreach (string ingredient in result.ingredients)
-{
-    ingredientsBuilder.AppendLine("- " + ingredient);
-}
+        foreach (string ingredientLine in result.ingredients)
+        {
+            RecipeOCRIngredient parsedIngredient = IngredientParser.Parse(ingredientLine);
 
-resultText.text =
-    "Titre détecté : " + result.title +
-    "\nPortions : " + result.portions +
-    "\nPréparation : " + result.preparationTime +
-    "\nCuisson : " + result.cookingTime +
-    "\nIngrédients détectés : " + result.ingredientCount +
-    "\n\nListe des ingrédients :\n" +
-    ingredientsBuilder.ToString() +
-    "\n\n--- TEXTE OCR ---\n\n" +
-    recognizedText;
+            ingredientsBuilder.AppendLine("• " + parsedIngredient.Name);
+
+            if (!string.IsNullOrEmpty(parsedIngredient.Quantity))
+            {
+                ingredientsBuilder.AppendLine("  Quantité : " + parsedIngredient.Quantity);
+            }
+
+            if (!string.IsNullOrEmpty(parsedIngredient.Unit))
+            {
+                ingredientsBuilder.AppendLine("  Unité : " + parsedIngredient.Unit);
+            }
+
+            ingredientsBuilder.AppendLine();
+        }
+
+        resultText.text =
+            "Titre détecté : " + result.title +
+            "\nPortions : " + result.portions +
+            "\nPréparation : " + result.preparationTime +
+            "\nCuisson : " + result.cookingTime +
+            "\nIngrédients détectés : " + result.ingredientCount +
+            "\n\nListe des ingrédients :\n" +
+            ingredientsBuilder.ToString() +
+            "\n\n--- TEXTE OCR ---\n\n" +
+            recognizedText;
     }
 }

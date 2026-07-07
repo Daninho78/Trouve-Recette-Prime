@@ -1,10 +1,11 @@
+[System.Serializable]
 public class RecipeOCRIngredient
 {
-    public string originalText;
+    public string OriginalLine;
 
-    public string quantity;
+    public string Quantity;
 
-    public string unit;
+    public string Unit;
 
-    public string name;
+    public string Name;
 }
