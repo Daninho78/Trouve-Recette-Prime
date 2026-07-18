@@ -14,6 +14,7 @@ public class UINavigation : MonoBehaviour
     public GameObject panelSearch;
     public GameObject panelFilter;
     public GameObject panelAddIngredients;
+    public GameObject panelOCRReview;
    
 
     void CloseAllPanels()
@@ -28,6 +29,7 @@ public class UINavigation : MonoBehaviour
         panelSearch.SetActive(false);
         panelFilter.SetActive(false);
         panelAddIngredients.SetActive(false);
+        panelOCRReview.SetActive(false);
         
     }
 

@@ -8,7 +8,7 @@ using System.Text;
 public class IngredientSuggestionManager : MonoBehaviour
 {
     private List<Ingredient> allIngredients = new List<Ingredient>();
-    
+
 
     private async void Start()
     {
@@ -50,6 +50,18 @@ public class IngredientSuggestionManager : MonoBehaviour
             .ToList();
 
         return results;
+    }
+
+    public Ingredient FindExactIngredient(string ingredientName)
+    {
+        if (string.IsNullOrWhiteSpace(ingredientName))
+            return null;
+
+        string normalizedSearch = NormalizeSearchText(ingredientName);
+
+        return allIngredients.FirstOrDefault(ingredient =>
+            NormalizeSearchText(ingredient.Name) == normalizedSearch
+        );
     }
 
     private string NormalizeSearchText(string text)
