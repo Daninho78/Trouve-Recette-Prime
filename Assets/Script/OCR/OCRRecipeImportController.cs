@@ -14,6 +14,7 @@ public class OCRRecipeImportController : MonoBehaviour
     [SerializeField] private Transform ingredientsContainer;
     [SerializeField] private IngredientItemUI ingredientItemPrefab;
     [SerializeField] private IngredientSuggestionManager ingredientSuggestionManager;
+    [SerializeField] private UnitSuggestionManager unitSuggestionManager;
 
     public void OnTakePhotoButtonClicked()
     {
@@ -63,11 +64,43 @@ public class OCRRecipeImportController : MonoBehaviour
                 data.quantityInput.text = parsedIngredient.Quantity;
                 data.unitInput.text = parsedIngredient.Unit;
 
-                Ingredient ingredient = ingredientSuggestionManager.FindExactIngredient(parsedIngredient.Name);
+                Ingredient ingredient = null;
+
+                foreach (string candidate in OCRIngredientNormalizer.GetCandidates(parsedIngredient.Name))
+                {
+                    ingredient = ingredientSuggestionManager.FindExactIngredient(candidate);
+
+                    if (ingredient != null)
+                        break;
+                }
+                Unit unit = null;
+
+                foreach (string candidate in OCRUnitNormalizer.GetCandidates(parsedIngredient.Unit))
+                {
+                    unit = unitSuggestionManager.FindExactUnit(candidate);
+
+                    if (unit != null)
+                        break;
+                }
+
+                if (ingredient != null)
+                {
+                    itemUI.SetSelectedIngredient(ingredient);
+                }
+
+                if (unit != null)
+                {
+                    itemUI.SetSelectedUnit(unit);
+                }
 
                 Debug.Log($"OCR : {parsedIngredient.Name} -> {(ingredient != null ? "Trouvé" : "Introuvable")}");
                 cacheDebug.AppendLine(
                     $"{parsedIngredient.Name} -> {(ingredient != null ? "Trouvé" : "Introuvable")}"
+                    );
+
+                Debug.Log($"Unité OCR : {parsedIngredient.Unit} -> {(unit != null ? unit.Name : "Introuvable")}");
+                cacheDebug.AppendLine(
+                    $"Unité : {parsedIngredient.Unit} -> {(unit != null ? unit.Name : "Introuvable")}"
                     );
 
                 itemUI.ClearSuggestionState();
@@ -78,5 +111,10 @@ public class OCRRecipeImportController : MonoBehaviour
         resultText.text =
      "--- TEST CACHE ---\n\n" +
      cacheDebug.ToString();
+    }
+
+    public void OnCreateRecipeButtonClicked()
+    {
+
     }
 }

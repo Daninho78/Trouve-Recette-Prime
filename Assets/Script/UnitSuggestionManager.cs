@@ -15,7 +15,7 @@ public class UnitSuggestionManager : MonoBehaviour
     private async Task LoadUnits()
     {
         allUnits = await UnitService.GetAllUnits();
-        Debug.Log("Suggestions unités prêtes : " + allUnits.Count);
+        Debug.Log("Suggestions unitï¿½s prï¿½tes : " + allUnits.Count);
     }
 
     public List<Unit> GetSuggestions(string searchText)
@@ -31,5 +31,17 @@ public class UnitSuggestionManager : MonoBehaviour
             .ThenBy(u => u.Name)
             .Take(10)
             .ToList();
+    }
+
+    public Unit FindExactUnit(string unitName)
+    {
+        if (string.IsNullOrWhiteSpace(unitName))
+            return null;
+
+        string search = unitName.ToLower().Trim();
+
+        return allUnits.FirstOrDefault(u =>
+            u.Name.ToLower().Trim() == search
+        );
     }
 }

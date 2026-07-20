@@ -19,7 +19,7 @@ public class IngredientItemUI : MonoBehaviour
 
     public bool suppressSuggestions = false;
 
-   
+
 
 
     private void Update()
@@ -50,7 +50,7 @@ public class IngredientItemUI : MonoBehaviour
         if (suppressSuggestions)
             return;
 
-        Debug.Log("Input ingrédient changé : " + value);
+        Debug.Log("Input ingrï¿½dient changï¿½ : " + value);
 
         IngredientInputData data = GetComponent<IngredientInputData>();
 
@@ -113,7 +113,7 @@ public class IngredientItemUI : MonoBehaviour
                 Ingredient capturedIngredient = ingredient;
                 button.onClick.AddListener(() =>
                 {
-                 
+
                     SelectSuggestion(capturedIngredient);
                 });
             }
@@ -136,13 +136,16 @@ public class IngredientItemUI : MonoBehaviour
             data.quantityInput.ActivateInputField();
         }
 
-        
+    }
 
+    public void SetSelectedIngredient(Ingredient ingredient)
+    {
+        SelectSuggestion(ingredient);
     }
 
     public void OnIngredientEndEdit(string value)
     {
-        Debug.Log("End edit ingrédient : " + value);
+        Debug.Log("End edit ingrï¿½dient : " + value);
     }
 
 
@@ -159,7 +162,7 @@ public class IngredientItemUI : MonoBehaviour
 
     public void OnUnitEndEdit(string value)
     {
-        Debug.Log("End edit unité : " + value);
+        Debug.Log("End edit unitï¿½ : " + value);
     }
 
     public void OnUnitInputChanged(string value)
@@ -238,9 +241,14 @@ public class IngredientItemUI : MonoBehaviour
         CheckSuggestionRowVisibility();
     }
 
+    public void SetSelectedUnit(Unit unit)
+    {
+        SelectUnitSuggestion(unit);
+    }
+
     public void ScrollThisItemToTop()
     {
-        Debug.Log("Scroll demandé pour : " + gameObject.name);
+        Debug.Log("Scroll demandï¿½ pour : " + gameObject.name);
 
         ScrollToIngredientItem scrollHelper = FindObjectOfType<ScrollToIngredientItem>();
 
